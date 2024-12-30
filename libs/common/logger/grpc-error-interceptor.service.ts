@@ -20,24 +20,34 @@ export class GrpcErrorInterceptor implements NestInterceptor {
 
     private handleError(exception: any, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
-        const request = ctx.getRequest();
+        let request;
 
-        if (request) {
+        try {
+            request = ctx.getRequest();
+        } catch (e) {
+            request = null;
+        }
+
+        if (request && request.headers && request.headers['content-type']) {
             this.logger.error('HTTP error intercepted', exception);
 
             throw new HttpException(
                 {
                     statusCode: HttpStatus.BAD_REQUEST,
-                    message: exception.details || 'Internal Server Error',
+                    message: exception.details || exception.message || 'Internal Server Error',
                 },
                 HttpStatus.BAD_REQUEST,
             );
         } else {
             this.logger.error('gRPC error intercepted', exception);
 
+            const rpcContext = host.switchToRpc();
+            const data = rpcContext.getData();
+
             throw new RpcException({
                 message: exception.details || exception.message || 'Internal Server Error',
-                code: exception.code,
+                code: exception.code || HttpStatus.BAD_REQUEST,
+                data: data,
             });
         }
     }

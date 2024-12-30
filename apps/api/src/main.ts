@@ -3,10 +3,9 @@ import { MicroserviceOptions } from '@nestjs/microservices';
 import { ApiModule } from './api.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {API_BASE_SERVICE_NAME, RAILWAY_PUBLIC_DOMAIN, SWAGGER_PORT} from 'api/constants';
-import {GrpcErrorInterceptor, HttpExceptionFilter, PinoLoggerService} from '../../../libs/common/logger';
+import {GrpcErrorInterceptor, PinoLoggerService} from '../../../libs/common/logger';
 import { getServerConfig } from '../../../libs/common/modules';
 import { GRPC_API_PORT } from '@smart-home/libs/grpc';
-import {ValidationPipe} from "@nestjs/common";
 
 async function bootstrap() {
   const logger = new PinoLoggerService();
