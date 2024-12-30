@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package api;
+
+// Импортируем сервис из feedback.proto
+import "./user.proto";
+
+// Определяем сообщение `Empty`
+message Empty {}
+
+// Определяем gRPC сервис, который будет использовать сервис Feedback
+service ApiService {
+  rpc GetFeedback (Empty) returns (user.UserResponse);
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+  rpc SendFeedback (UserRequest) returns (UserResponse);
+}
+
+message UserRequest {
+  string feedback = 1;
+}
+
+message UserResponse {
+  string status = 1;
+}
