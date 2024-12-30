@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import {IGetUserById, ILoginUser, IRegisterUser, IUser} from "@smart-home/libs/types/users/user";
-import {UserEntity} from "user/entities";
-import { EntityManager } from '@mikro-orm/core';
-import * as bcrypt from 'bcrypt';
-import {RpcException} from "@nestjs/microservices";
+import {Collection, EntityManager} from '@mikro-orm/core';
+import {
+    ICreateLot,
+    ICreateProduct,
+    IGetLots,
+    IGetProducts,
+    ILot,
+    ILotMetadataPagination,
+    IProduct, IProductMetadataPagination
+} from "@smart-home/libs/types/market";
+import {IGetProductsByIds} from "@smart-home/libs/types/market/interfaces/get-products-by-ids.interface";
+import {LotEntity, ProductEntity} from "market/entities";
 
 @Injectable()
 export class MarketService {
@@ -11,27 +18,44 @@ export class MarketService {
         private readonly em: EntityManager,
     ) {}
 
-    async getUserById(params: IGetUserById): Promise<IUser> {
-        return this.em.fork().getRepository(UserEntity).getUserById(params);
+    async getProducts(params: IGetProducts): Promise<IProductMetadataPagination> {
+        return this.em.fork().getRepository(ProductEntity).getProducts(params);
     }
 
-    async registerUser(params: IRegisterUser): Promise<IUser> {
-        return this.em.fork().getRepository(UserEntity).registerUser(params);
+    async getLots(params: IGetLots): Promise<ILotMetadataPagination> {
+        return this.em.fork().getRepository(LotEntity).getLots(params);
     }
 
-    async loginUser(params: ILoginUser): Promise<IUser> {
-        const {loginParam, password} = params;
+    async getProductsByIds(params: IGetProductsByIds): Promise<IProduct[]> {
+       return this.em.fork().getRepository(ProductEntity).getProductsByIds(params);
+    }
 
-        const user = await this.em.fork().getRepository(UserEntity).getUserByParams({
-            username: loginParam,
-            email: loginParam,
-            phone: loginParam
-        });
+    async createProduct(params: ICreateProduct): Promise<IProduct> {
+        const { name, shortDescription, description, image } = params;
 
-        if (!await bcrypt.compare(password, user.passwordHash)) {
-            throw new RpcException('ERRORS.USER.USER_AUTH_DATA_NOT_VALID');
-        }
+        const product = new ProductEntity();
+        product.name = name;
+        if(shortDescription) product.shortDescription = shortDescription;
+        if(description) product.description = description;
+        if(image) product.image = image;
 
-        return user;
+        await this.em.fork().persistAndFlush(product);
+        return product;
+    }
+
+    async createLot(params: ICreateLot): Promise<ILot> {
+      const { name, shortDescription, description, image, productsIds } = params;
+
+      const products = await this.getProductsByIds({ ids: productsIds });
+
+      const lot = new LotEntity();
+      lot.name = name;
+      if(shortDescription) lot.shortDescription = shortDescription;
+      if(description) lot.description = description;
+      if(image) lot.image = image;
+      lot.products = new Collection<IProduct>(lot, products);
+
+      await this.em.fork().persistAndFlush(lot);
+      return lot;
     }
 }

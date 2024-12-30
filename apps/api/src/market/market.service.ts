@@ -1,28 +1,55 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { GrpcUserService } from "@smart-home/libs/grpc";
-import { UserResponseDto } from "api/users/user/dto";
-import { USER_BASE_SERVICE_NAME} from "@smart-home/libs/common/constants";
+import {MARKET_BASE_SERVICE_NAME} from "@smart-home/libs/common/constants";
 import { PinoLoggerService} from "@smart-home/libs/common/logger";
-import {IGetUserById} from "@smart-home/libs/types/users/user";
-import {JwtService} from "@nestjs/jwt";
+import {GrpcMarketService} from "@smart-home/libs/grpc/services/grpc-market.service";
+import {CreateProductRequestDto, ProductMetadataPaginationResponseDto, ProductResponseDto, CreateLotRequestDto, LotMetadataPaginationResponseDto, LotResponseDto, GetProductsRequestDto, GetLotsRequestDto} from "api/market/dto";
 
 @Injectable()
 export class MarketService {
-    private userService: GrpcUserService;
+    private marketService: GrpcMarketService;
     private readonly logger = new PinoLoggerService()
 
     constructor(
-        @Inject(`${USER_BASE_SERVICE_NAME}_PACKAGE`) private userClient: ClientGrpc,
-        private readonly jwtService: JwtService,
+        @Inject(`${MARKET_BASE_SERVICE_NAME}_PACKAGE`) private marketClient: ClientGrpc,
         ) {}
 
     onModuleInit() {
-        this.userService = this.userClient.getService<GrpcUserService>('MarketService');
+        this.marketService = this.marketClient.getService<GrpcMarketService>('MarketService');
     }
 
-    async getUserById(params: IGetUserById): Promise<UserResponseDto> {
-        return firstValueFrom(this.userService.getUserById(params));
+    async createProduct(params: CreateProductRequestDto): Promise<ProductResponseDto> {
+        return firstValueFrom(this.marketService.createProduct(params));
+    }
+
+    async createLot(params: CreateLotRequestDto): Promise<LotResponseDto> {
+        return firstValueFrom(this.marketService.createLot(params));
+    }
+
+    async getProducts(params: GetProductsRequestDto): Promise<ProductMetadataPaginationResponseDto> {
+        const { page } = params;
+        const { size, number } = page;
+
+        return firstValueFrom(this.marketService.getProducts({
+            pagination: {
+                limit: size,
+                offset: (number - 1) * size,
+            },
+            ...params,
+        }));
+    }
+
+    async getLots(params: GetLotsRequestDto): Promise<LotMetadataPaginationResponseDto> {
+        const { page } = params;
+        const { size, number } = page;
+
+        return firstValueFrom(this.marketService.getLots({
+            pagination: {
+                limit: size,
+                offset: (number - 1) * size,
+            },
+            ...params,
+        }));
     }
 }

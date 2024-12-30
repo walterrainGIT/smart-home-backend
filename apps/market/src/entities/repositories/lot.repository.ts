@@ -8,8 +8,28 @@ import {PASSWORD_SALT} from "user/constants";
 import {RpcException} from "@nestjs/microservices";
 import moment from 'moment';
 import {LotEntity} from "../lot.entity";
+import {IGetLots, ILot, ILotMetadataPagination} from "@smart-home/libs/types/market";
 
 export class LotRepository extends SqlEntityRepository<LotEntity> {
+  async getLots(params: IGetLots): Promise<ILotMetadataPagination> {
+    const { pagination } = params;
+    const { limit, offset } = pagination;
+
+    const qb = this.em.createQueryBuilder(LotEntity)
+        .limit(limit, offset);
+
+    const [lots, total] = await qb.getResultAndCount();
+
+    return {
+      lots,
+      metadata: {
+        total,
+        limit,
+        offset,
+      }
+    }
+  }
+
   async getUserById(params: IGetUserById): Promise<IUser> {
     const { id } = params;
 

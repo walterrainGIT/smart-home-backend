@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpStatus, Patch, Post, Req, Res, UseGuards} from '@nestjs/common';
+import {Body, Controller, HttpStatus, Patch, Post, Res, UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {LoginUserRequestDto, RegisterUserRequestDto, UserResponseDto} from "api/users/user/dto";
 import {ApiBearerAuth, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -16,7 +16,6 @@ export class AuthController {
     type: UserResponseDto,
     description: 'Returns registered user',
   })
-  @ApiBearerAuth()
   async registerUser(
       @Body() body: RegisterUserRequestDto
   ): Promise<UserResponseDto> {
@@ -29,7 +28,7 @@ export class AuthController {
     type: UserResponseDto,
     description: 'Returns logged user',
   })
-  @ApiBearerAuth()
+
   async loginUser(
       @Body() body: LoginUserRequestDto,
       @Res({ passthrough: true }) response: Response,
@@ -45,8 +44,9 @@ export class AuthController {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('logout')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('token', {
       httpOnly: true,

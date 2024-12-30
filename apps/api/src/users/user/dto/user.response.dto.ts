@@ -1,6 +1,6 @@
 import {IUser, UserRoleEnum} from "@smart-home/libs/types/users/user";
 import {ApiProperty} from "@nestjs/swagger";
-import {IsEnum, IsNumber, IsOptional, IsString} from "class-validator";
+import {IsDate, IsEnum, IsNumber, IsOptional, IsString} from "class-validator";
 import {Type} from "class-transformer";
 
 export class UserResponseDto implements IUser {
@@ -102,4 +102,16 @@ export class UserResponseDto implements IUser {
     @IsEnum(UserRoleEnum)
     @IsOptional()
     role: UserRoleEnum;
+
+    @ApiProperty({
+        name: 'lastLogin',
+        type: Date,
+        required: true,
+        description: 'lastLogin',
+        example: '2024-01-01',
+    })
+    @Type(() => Date)
+    @IsDate()
+    @IsOptional()
+    lastLogin: Date;
 }

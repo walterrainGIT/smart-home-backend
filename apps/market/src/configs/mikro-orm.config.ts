@@ -1,9 +1,8 @@
 import {defineMikroOrmConfig} from "@smart-home/libs/common/modules/configs";
-import {LotEntity} from "../entities";
-import {ProductEntity} from "../entities/product.entity";
+import {LotEntity, ProductEntity} from "../entities";
 
 export const entities = [ LotEntity, ProductEntity ];
 
-export const mikroOrmConfig = defineMikroOrmConfig({ entities, servicePath: 'users/user' });
+export const mikroOrmConfig = defineMikroOrmConfig({ entities, servicePath: 'market' });
 
 export default mikroOrmConfig;

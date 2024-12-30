@@ -1,18 +1,47 @@
 import { Controller } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { GrpcMethod } from '@nestjs/microservices';
-import {IGetUserById, ILoginUser, IRegisterUser, IUser} from '@smart-home/libs/types/users/user';
 import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
 import { instanceToPlain } from 'class-transformer';
+import {
+  ICreateLot,
+  ICreateProduct,
+  IGetLots,
+  IGetProducts,
+  ILot, ILotMetadataPagination,
+  IProduct,
+  IProductMetadataPagination
+} from "@smart-home/libs/types/market";
+import {MarketService} from "market/market.service";
 
 @Controller('User')
 export class MarketController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly marketService: MarketService) {}
 
-  @GrpcMethod('MarketService', 'RegisterUser')
-  async registerUser(params: IRegisterUser): Promise<IUser> {
-    const user = await this.authService.registerUser(params);
+  @GrpcMethod('MarketService', 'CreateProduct')
+  async createProduct(params: ICreateProduct): Promise<IProduct> {
+    const product = await this.marketService.createProduct(params);
 
-    return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
+    return instanceToPlain(product, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IProduct;
+  }
+
+  @GrpcMethod('MarketService', 'CreateLot')
+  async createLot(params: ICreateLot): Promise<ILot> {
+    const lot = await this.marketService.createLot(params);
+
+    return instanceToPlain(lot, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as ILot;
+  }
+
+  @GrpcMethod('MarketService', 'GetProducts')
+  async getProducts(params: IGetProducts): Promise<IProductMetadataPagination> {
+    const products = await this.marketService.getProducts(params);
+
+    return instanceToPlain(products, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IProductMetadataPagination;
+  }
+
+  @GrpcMethod('MarketService', 'GetLots')
+  async getLots(params: IGetLots): Promise<ILotMetadataPagination> {
+    const lots = await this.marketService.getLots(params);
+
+    return instanceToPlain(lots, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as ILotMetadataPagination;
   }
 }

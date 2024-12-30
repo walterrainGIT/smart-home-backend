@@ -1,0 +1,2 @@
+export const PAGINATION_PAGE_NUMBER_START = 1;
+export const PAGINATION_PAGE_SIZE_MAX = 100;

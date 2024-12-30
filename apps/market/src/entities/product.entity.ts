@@ -1,22 +1,23 @@
 import {
+    Collection,
     Entity,
-    EntityRepositoryType,
+    EntityRepositoryType, ManyToMany,
     PrimaryKey,
     Property,
 } from '@mikro-orm/core';
-import { Exclude, Expose } from 'class-transformer';
+import {Exclude, Expose} from 'class-transformer';
 import { BaseEntity, NumberBigIntType } from '@smart-home/libs/common/database';
-import { UserRoleEnum } from '@smart-home/libs/types/users/user';
 import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
 import {ProductRepository} from "./repositories";
-import {ILot} from "@smart-home/libs/types/market";
+import {ILot, IProduct} from "@smart-home/libs/types/market";
+import {LotEntity} from "market/entities/lot.entity";
 
 @Entity({
     tableName: `market.products`,
     repository: () => ProductRepository,
 })
 @Exclude()
-export class ProductEntity extends BaseEntity implements ILot {
+export class ProductEntity extends BaseEntity implements IProduct {
     [EntityRepositoryType]: ProductRepository;
 
     @PrimaryKey({ type: NumberBigIntType, autoincrement: true })
@@ -25,37 +26,28 @@ export class ProductEntity extends BaseEntity implements ILot {
 
     @Property()
     @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
-    firstName: string;
+    name: string;
 
     @Property()
     @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
-    lastName: string;
-
-    @Property({ unique: true })
-    @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
-    email: string;
-
-    @Property({ unique: true })
-    @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
-    phone?: string;
+    shortDescription?: string;
 
     @Property()
     @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
-    address?: string;
-
-    @Property({ unique: true })
-    @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
-    username: string;
-
-    @Property()
-    @Expose({ groups: [PlainGroupsEnum.ADMIN] })
-    passwordHash: string;
+    description?: string;
 
     @Property()
     @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
-    role: UserRoleEnum;
+    price?: number;
 
     @Property()
     @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
-    lastLogin: Date;
+    image?: string;
+
+    @ManyToMany(() => LotEntity, 'products', {
+        owner: true,
+        joinColumn: 'product_id',
+        inverseJoinColumn: 'lot_id',
+    })
+    lots = new Collection<ILot>(this);
 }
