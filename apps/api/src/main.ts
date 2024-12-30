@@ -3,9 +3,10 @@ import { MicroserviceOptions } from '@nestjs/microservices';
 import { ApiModule } from './api.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {API_BASE_SERVICE_NAME, RAILWAY_PUBLIC_DOMAIN, SWAGGER_PORT} from 'api/constants';
-import {HttpExceptionFilter, PinoLoggerService} from '../../../libs/common/logger';
+import {GrpcErrorInterceptor, HttpExceptionFilter, PinoLoggerService} from '../../../libs/common/logger';
 import { getServerConfig } from '../../../libs/common/modules';
 import { GRPC_API_PORT } from '@smart-home/libs/grpc';
+import {ValidationPipe} from "@nestjs/common";
 
 async function bootstrap() {
   const logger = new PinoLoggerService();
@@ -16,14 +17,15 @@ async function bootstrap() {
     serviceName: API_BASE_SERVICE_NAME,
     port: GRPC_API_PORT,
   }));
-  grpcApp.useGlobalFilters(new HttpExceptionFilter());
   // Запуск gRPC сервиса
+  grpcApp.useGlobalInterceptors(new GrpcErrorInterceptor());
   grpcApp.listen();
 
   const httpApp = await NestFactory.create(ApiModule, {
     logger: new PinoLoggerService(),
   });
-  httpApp.useGlobalFilters(new HttpExceptionFilter());
+  httpApp.useGlobalInterceptors(new GrpcErrorInterceptor());
+
   // Конфигурация Swagger
   const config = new DocumentBuilder()
     .setTitle('Smart Home API')
@@ -35,9 +37,9 @@ async function bootstrap() {
 
   // Настройка CORS
   httpApp.enableCors({
-    origin: 'https://walterraingit.github.io/smart-home-frontend/',
-    methods: 'GET,POST,PUT,DELETE',
-    credentials: true,
+    origin: ['http://localhost:3000', 'https://walterraingit.github.io/smart-home-frontend/'], // Разрешаем только ваши фронтенд-URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Разрешаем нужные HTTP методы
+    allowedHeaders: ['Content-Type', 'Authorization'], // Разрешаем необходимые заголовки
   });
 
   // Запуск HTTP сервиса с использованием Railway-порта

@@ -18,6 +18,8 @@ import {getClientConfig} from "@smart-home/libs/common/modules/configs";
     MikroOrmModule.forFeature({ entities }),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [
+      UserService
+  ],
 })
 export class UserModule {}
