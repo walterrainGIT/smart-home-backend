@@ -1,6 +1,6 @@
 import { MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } from '@smart-home/libs/common/constants/database';
+import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } from '@smart-home/libs/common/constants';
 import * as assert from 'assert';
 import { IDefineMikroOrmConfig } from '../modules/interfaces';
 
