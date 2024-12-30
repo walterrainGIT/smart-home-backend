@@ -1,5 +1,5 @@
 import { BigIntType, Entity, Property, Type } from '@mikro-orm/core';
-import * as bigInt from 'big-integer';
+import bigInt from 'big-integer';
 
 export class NumberBigIntType extends Type {
   convertToDatabaseValue(value: any) {

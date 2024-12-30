@@ -1,7 +1,7 @@
 import { ClientsModuleOptions, MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { GRPC_HOST } from '../../grpc/constants';
-import { PinoLoggerService } from '../logger';
-import { IDefineBaseGrpcConfig } from '../modules';
+import {GRPC_HOST} from "@smart-home/libs/grpc";
+import {IDefineBaseGrpcConfig} from "@smart-home/libs/common/modules";
+import {PinoLoggerService} from "@smart-home/libs/common/logger";
 
 function defineBaseGrpcConfig(params: IDefineBaseGrpcConfig) {
   const { serviceName, host = GRPC_HOST, port } = params;

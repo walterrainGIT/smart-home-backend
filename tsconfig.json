@@ -17,10 +17,15 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noEmit": true,
     "paths": {
       "api/*": ["apps/api/src/*"],
       "user/*": ["apps/users/user/src/*"],
-      "@smart-home/libs/*": ["libs/*"],
+      "@smart-home/libs/*": ["libs/*"]
     }
   },
   "include": [

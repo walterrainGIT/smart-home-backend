@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RAILWAY_PUBLIC_DOMAIN, SWAGGER_PORT } from 'api/constants';
 import { PinoLoggerService } from '../../../libs/common/logger';
 import { getServerConfig } from '../../../libs/common/modules';
-import { GRPC_API_PORT } from '../../../libs/grpc/constants';
+import { GRPC_API_PORT } from '@smart-home/libs/grpc';
 
 async function bootstrap() {
   const logger = new PinoLoggerService();

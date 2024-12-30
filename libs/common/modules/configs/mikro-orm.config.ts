@@ -2,7 +2,7 @@ import { MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } from '@smart-home/libs/common/constants/database';
 import * as assert from 'assert';
-import { IDefineMikroOrmConfig } from '../modules/interfaces';
+import {IDefineMikroOrmConfig} from "@smart-home/libs/common/modules";
 
 export function defineMikroOrmConfig(params: IDefineMikroOrmConfig): MikroOrmModuleOptions  {
   const { dbName = DB_NAME, user = DB_USERNAME, password = DB_PASSWORD, host = DB_HOST, port = DB_PORT, entities, servicePath } = params;
