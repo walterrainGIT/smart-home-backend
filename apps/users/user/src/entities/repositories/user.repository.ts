@@ -2,12 +2,24 @@ import {
   SqlEntityRepository,
 } from '@mikro-orm/postgresql';
 import { UserEntity } from 'user/entities';
-import {IGetUserByParams, IRegisterUser, IUser, UserRoleEnum} from "@smart-home/libs/types/users/user";
+import {IGetUserById, IGetUserByParams, IRegisterUser, IUser, UserRoleEnum} from "@smart-home/libs/types/users/user";
 import * as bcrypt from 'bcrypt';
 import {PASSWORD_SALT} from "user/constants";
 import {RpcException} from "@nestjs/microservices";
 
 export class UserRepository extends SqlEntityRepository<UserEntity> {
+  async getUserById(params: IGetUserById): Promise<IUser> {
+    const { id } = params;
+
+    const user = await this.em.getRepository(UserEntity).findOne({ id });
+
+    if(!user) {
+      throw new RpcException('ERRORS.USER.USER_NOT_FOUND');
+    }
+
+    return user;
+  }
+
   async registerUser(params: IRegisterUser): Promise<IUser> {
     const {
       firstName,
@@ -53,10 +65,10 @@ export class UserRepository extends SqlEntityRepository<UserEntity> {
       username,
     });
     if(phone) qb.orWhere({
-      username,
+      phone,
     });
     if(email) qb.orWhere({
-      username,
+      email,
     });
 
     const user = await qb.getSingleResult();

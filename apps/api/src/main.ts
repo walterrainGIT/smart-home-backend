@@ -6,6 +6,8 @@ import {API_BASE_SERVICE_NAME, RAILWAY_PUBLIC_DOMAIN, SWAGGER_PORT} from 'api/co
 import {GrpcErrorInterceptor, PinoLoggerService} from '../../../libs/common/logger';
 import { getServerConfig } from '../../../libs/common/modules';
 import { GRPC_API_PORT } from '@smart-home/libs/grpc';
+import * as cookieParser from 'cookie-parser';
+import {CookieInterceptor} from "api/cookies";
 
 async function bootstrap() {
   const logger = new PinoLoggerService();
@@ -24,12 +26,20 @@ async function bootstrap() {
     logger: new PinoLoggerService(),
   });
   httpApp.useGlobalInterceptors(new GrpcErrorInterceptor());
+  httpApp.useGlobalInterceptors(new CookieInterceptor());
+  httpApp.use(cookieParser());
 
   // Конфигурация Swagger
   const config = new DocumentBuilder()
     .setTitle('Smart Home API')
     .setDescription('API documentation for the Smart Home project')
     .setVersion('1.0')
+    .addBearerAuth()
+      .addCookieAuth('token', {
+        type: 'apiKey',
+        in: 'cookie',
+        name: 'token',
+      })
     .build();
   const document = SwaggerModule.createDocument(httpApp, config);
   SwaggerModule.setup('api', httpApp, document);

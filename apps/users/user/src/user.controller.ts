@@ -1,24 +1,31 @@
 import { Controller } from '@nestjs/common';
-import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 import { GrpcMethod } from '@nestjs/microservices';
-import { ILoginUser, IRegisterUser, IUser } from '@smart-home/libs/types/users/user';
+import {IGetUserById, ILoginUser, IRegisterUser, IUser} from '@smart-home/libs/types/users/user';
 import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
 import { instanceToPlain } from 'class-transformer';
 
 @Controller('User')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @GrpcMethod('UserService', 'RegisterUser')
   async registerUser(params: IRegisterUser): Promise<IUser> {
-    const user = await this.userService.registerUser(params);
+    const user = await this.authService.registerUser(params);
 
     return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
   }
 
   @GrpcMethod('UserService', 'LoginUser')
   async loginUser(params: ILoginUser): Promise<IUser> {
-    const user = await this.userService.loginUser(params);
+    const user = await this.authService.loginUser(params);
+
+    return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
+  }
+
+  @GrpcMethod('UserService', 'GetUserById')
+  async getUserById(params: IGetUserById): Promise<IUser> {
+    const user = await this.authService.getUserById(params);
 
     return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
   }

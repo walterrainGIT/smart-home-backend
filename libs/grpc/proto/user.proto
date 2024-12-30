@@ -32,6 +32,11 @@ message LoginUser {
   string password = 2;       // Хеш пароля
 }
 
+// Запрос пользователя
+message GetUserById {
+  string id = 1;      // Id пользователя
+}
+
 // Ответ на запрос пользователя (информация о зарегистрированном пользователе)
 message UserResponse {
   int32 id = 1;              // ID пользователя
@@ -42,4 +47,5 @@ message UserResponse {
   string address = 6;        // Адрес (необязательное)
   string username = 7;       // Имя пользователя
   UserRoleEnum role = 9;     // Роль пользователя
+  string accessToken = 10;   // Token авторизации
 }

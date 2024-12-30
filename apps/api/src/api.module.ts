@@ -4,9 +4,11 @@ import { ApiService } from './api.service';
 import { ClientsModule } from '@nestjs/microservices';
 import { GRPC_USER_PORT } from '@smart-home/libs/grpc';
 import { UserModule } from 'api/users/user/user.module';
-import { USER_BASE_SERVICE_NAME } from '@smart-home/libs/common/constants';
+import {JWT_SECRET_KEY, JWT_TTL, USER_BASE_SERVICE_NAME} from '@smart-home/libs/common/constants';
 import { getClientConfig } from '@smart-home/libs/common/modules';
 import { PinoLoggerService} from '@smart-home/libs/common/logger';
+import {JwtModule} from "@nestjs/jwt";
+import {JwtStrategy} from "api/users/user/jwt-strategy";
 
 @Module({
   imports: [
@@ -15,11 +17,16 @@ import { PinoLoggerService} from '@smart-home/libs/common/logger';
       port: GRPC_USER_PORT,
     })),
     UserModule,
+    JwtModule.register({
+      secret: JWT_SECRET_KEY,
+      signOptions: { expiresIn: JWT_TTL },
+    }),
   ],
   controllers: [ApiController],
   providers: [
     PinoLoggerService,
     ApiService,
+    JwtStrategy,
   ],
 })
 export class ApiModule {}
