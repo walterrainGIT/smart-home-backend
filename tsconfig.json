@@ -26,6 +26,7 @@
     "paths": {
       "api/*": ["apps/api/src/*"],
       "user/*": ["apps/users/user/src/*"],
+      "market/*": ["apps/market/src/*"],
       "@smart-home/libs/*": ["libs/*"]
     }
   },

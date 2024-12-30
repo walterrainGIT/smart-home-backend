@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build api && nest build users/user",
-    "start": "nest start api && nest start users/user",
+    "build": "nest build api && nest build users/user && nest build market",
+    "start": "nest start api && nest start users/user && nest start market",
     "start:prod": "node dist/main.js",
     "start:docker": "yarn install && yarn start:prod",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
@@ -22,7 +22,11 @@
 
     "migration:generate:user": "mikro-orm migration:create --config apps/users/user/src/configs/mikro-orm.config.ts --name",
     "migration:up:user": "mikro-orm migration:up --config apps/users/user/src/configs/mikro-orm.config.ts",
-    "migration:down:user": "mikro-orm migration:down --config apps/users/user/src/configs/mikro-orm.config.ts"
+    "migration:down:user": "mikro-orm migration:down --config apps/users/user/src/configs/mikro-orm.config.ts",
+
+    "migration:generate:market": "mikro-orm migration:create --config apps/market/src/configs/mikro-orm.config.ts --name",
+    "migration:up:market": "mikro-orm migration:up --config apps/market/src/configs/mikro-orm.config.ts",
+    "migration:down:market": "mikro-orm migration:down --config apps/market/src/configs/mikro-orm.config.ts"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.5",

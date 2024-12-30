@@ -2,12 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { ApiModule } from './api.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import {API_BASE_SERVICE_NAME, RAILWAY_PUBLIC_DOMAIN, SWAGGER_PORT} from 'api/constants';
+import { RAILWAY_PUBLIC_DOMAIN, SWAGGER_PORT} from 'api/constants';
 import {GrpcErrorInterceptor, PinoLoggerService} from '../../../libs/common/logger';
 import { getServerConfig } from '../../../libs/common/modules';
 import { GRPC_API_PORT } from '@smart-home/libs/grpc';
 import * as cookieParser from 'cookie-parser';
-import {CookieInterceptor} from "api/cookies";
+import {CookieInterceptor} from "libs/common/cookies";
+import {API_BASE_SERVICE_NAME} from "@smart-home/libs/common/constants";
 
 async function bootstrap() {
   const logger = new PinoLoggerService();

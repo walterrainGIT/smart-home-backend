@@ -5,18 +5,19 @@ import {
   Property,
 } from '@mikro-orm/core';
 import { Exclude, Expose } from 'class-transformer';
-import { UserRepository } from 'user/entities';
 import { BaseEntity, NumberBigIntType } from '@smart-home/libs/common/database';
-import { IUser, UserRoleEnum } from '@smart-home/libs/types/users/user';
+import { UserRoleEnum } from '@smart-home/libs/types/users/user';
 import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
+import {LotRepository} from "./repositories";
+import {ILot} from "@smart-home/libs/types/market";
 
 @Entity({
-  tableName: `users.users`,
-  repository: () => UserRepository,
+  tableName: `market.lots`,
+  repository: () => LotRepository,
 })
 @Exclude()
-export class UserEntity extends BaseEntity implements IUser {
-  [EntityRepositoryType]: UserRepository;
+export class LotEntity extends BaseEntity implements ILot {
+  [EntityRepositoryType]: LotRepository;
 
   @PrimaryKey({ type: NumberBigIntType, autoincrement: true })
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
