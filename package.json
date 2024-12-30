@@ -19,6 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./app/stest/jest-e2e.json",
+
     "migration:generate:user": "mikro-orm migration:create --config apps/users/user/src/configs/mikro-orm.config.ts --name",
     "migration:up:user": "mikro-orm migration:up --config apps/users/user/src/configs/mikro-orm.config.ts",
     "migration:down:user": "mikro-orm migration:down --config apps/users/user/src/configs/mikro-orm.config.ts"
@@ -48,6 +49,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "mikro-orm": "^6.4.1",
+    "moment": "^2.30.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.13.1",

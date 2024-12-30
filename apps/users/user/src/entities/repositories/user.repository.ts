@@ -6,6 +6,7 @@ import {IGetUserById, IGetUserByParams, IRegisterUser, IUser, UserRoleEnum} from
 import * as bcrypt from 'bcrypt';
 import {PASSWORD_SALT} from "user/constants";
 import {RpcException} from "@nestjs/microservices";
+import moment from 'moment';
 
 export class UserRepository extends SqlEntityRepository<UserEntity> {
   async getUserById(params: IGetUserById): Promise<IUser> {
@@ -47,6 +48,7 @@ export class UserRepository extends SqlEntityRepository<UserEntity> {
       user.username = username;
       user.passwordHash = hashedPassword;
       user.role = UserRoleEnum.USER;
+      user.lastLogin = moment().toDate();
 
       await this.em.persistAndFlush(user);
       return user;

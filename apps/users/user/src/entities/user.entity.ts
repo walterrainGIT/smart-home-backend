@@ -53,4 +53,8 @@ export class UserEntity extends BaseEntity implements IUser {
   @Property()
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   role: UserRoleEnum;
+
+  @Property()
+  @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
+  lastLogin: Date;
 }

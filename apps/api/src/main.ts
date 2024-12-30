@@ -34,8 +34,8 @@ async function bootstrap() {
     .setTitle('Smart Home API')
     .setDescription('API documentation for the Smart Home project')
     .setVersion('1.0')
-    .addBearerAuth()
-      .addCookieAuth('token', {
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
+    .addCookieAuth('token', {
         type: 'apiKey',
         in: 'cookie',
         name: 'token',
@@ -49,6 +49,7 @@ async function bootstrap() {
     origin: ['http://localhost:3000', 'https://walterraingit.github.io/smart-home-frontend/'], // Разрешаем только ваши фронтенд-URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Разрешаем нужные HTTP методы
     allowedHeaders: ['Content-Type', 'Authorization'], // Разрешаем необходимые заголовки
+    credentials: true,
   });
 
   // Запуск HTTP сервиса с использованием Railway-порта

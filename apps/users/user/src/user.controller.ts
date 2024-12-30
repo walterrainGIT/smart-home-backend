@@ -9,21 +9,21 @@ import { instanceToPlain } from 'class-transformer';
 export class UserController {
   constructor(private readonly authService: AuthService) {}
 
-  @GrpcMethod('UserService', 'RegisterUser')
+  @GrpcMethod('AuthService', 'RegisterUser')
   async registerUser(params: IRegisterUser): Promise<IUser> {
     const user = await this.authService.registerUser(params);
 
     return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
   }
 
-  @GrpcMethod('UserService', 'LoginUser')
+  @GrpcMethod('AuthService', 'LoginUser')
   async loginUser(params: ILoginUser): Promise<IUser> {
     const user = await this.authService.loginUser(params);
 
     return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
   }
 
-  @GrpcMethod('UserService', 'GetUserById')
+  @GrpcMethod('AuthService', 'GetUserById')
   async getUserById(params: IGetUserById): Promise<IUser> {
     const user = await this.authService.getUserById(params);
 

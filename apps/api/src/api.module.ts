@@ -8,7 +8,7 @@ import {JWT_SECRET_KEY, JWT_TTL, USER_BASE_SERVICE_NAME} from '@smart-home/libs/
 import { getClientConfig } from '@smart-home/libs/common/modules';
 import { PinoLoggerService} from '@smart-home/libs/common/logger';
 import {JwtModule} from "@nestjs/jwt";
-import {JwtStrategy} from "api/users/user/jwt-strategy";
+import {JwtStrategy} from "api/users/user/auth/jwt-strategy";
 
 @Module({
   imports: [

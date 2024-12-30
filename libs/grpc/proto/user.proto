@@ -13,6 +13,7 @@ enum UserRoleEnum {
 service UserService {
   rpc RegisterUser (RegisterUser) returns (UserResponse); // Метод регистрации пользователя
   rpc LoginUser (LoginUser) returns (UserResponse); // Метод логина пользователя
+  rpc GetUserById (GetUserById) returns (UserResponse); // Метод запроса пользователя по id
 }
 
 // Запрос на регистрацию пользователя

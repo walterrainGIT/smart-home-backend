@@ -6,6 +6,8 @@ import { getClientConfig } from '@smart-home/libs/common/modules';
 import {JWT_SECRET_KEY, JWT_TTL, USER_BASE_SERVICE_NAME} from '@smart-home/libs/common/constants';
 import { GRPC_USER_PORT } from '@smart-home/libs/grpc';
 import {JwtModule, JwtService} from "@nestjs/jwt";
+import {AuthController} from "api/users/user/auth/auth.controller";
+import {AuthService} from "api/users/user/auth/auth.service";
 
 @Module({
   imports: [
@@ -14,9 +16,10 @@ import {JwtModule, JwtService} from "@nestjs/jwt";
       port: GRPC_USER_PORT,
     })),
   ],
-  controllers: [UserController],
+  controllers: [UserController, AuthController],
   providers: [
     UserService,
+      AuthService,
     JwtService,
   ],
 })

@@ -10,4 +10,5 @@ export interface IUser {
   username: string;
   passwordHash: string;
   role: UserRoleEnum;
+  lastLogin: Date;
 }
