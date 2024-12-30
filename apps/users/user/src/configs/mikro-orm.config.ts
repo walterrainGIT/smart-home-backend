@@ -1,5 +1,5 @@
-import { defineMikroOrmConfig } from '@smart-home/libs/common/modules';
 import { UserEntity } from 'user/entities';
+import {defineMikroOrmConfig} from "@smart-home/libs/common/modules/configs";
 
 export const entities = [ UserEntity ];
 
