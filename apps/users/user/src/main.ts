@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import {NestFactory, Reflector} from '@nestjs/core';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { UserModule } from './user.module';
 import { GRPC_USER_PORT } from '@smart-home/libs/grpc';

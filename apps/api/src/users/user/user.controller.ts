@@ -1,14 +1,35 @@
-import { Controller, Get } from '@nestjs/common';
+import {Body, Controller, Get, HttpStatus, Post, UseGuards} from '@nestjs/common';
 import { UserService } from './user.service';
+import {LoginUserRequestDto, RegisterUserRequestDto, UserResponseDto} from "api/users/user/dto";
+import {ApiBearerAuth, ApiResponse} from "@nestjs/swagger";
 
 @Controller()
 export class UserController {
-  constructor(private readonly apiService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
-  /*@Get()
-  async getFeedback() {
-    const feedbackData = 'This is feedback data';
+  @Post()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserResponseDto,
+    description: 'Returns registered user',
+  })
+  @ApiBearerAuth()
+  registerUser(
+      @Body() body: RegisterUserRequestDto
+  ): Promise<UserResponseDto> {
+    return this.userService.registerUser(body);
+  }
 
-    return this.apiService.processFeedback({ data: feedbackData });
-  }*/
+  @Post('login')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: UserResponseDto,
+    description: 'Returns logged user',
+  })
+  @ApiBearerAuth()
+  loginUser(
+      @Body() body: LoginUserRequestDto
+  ): Promise<UserResponseDto> {
+    return this.userService.loginUser(body);
+  }
 }

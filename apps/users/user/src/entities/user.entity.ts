@@ -18,7 +18,7 @@ import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
 export class UserEntity extends BaseEntity implements IUser {
   [EntityRepositoryType]: UserRepository;
 
-  @PrimaryKey({ type: NumberBigIntType })
+  @PrimaryKey({ type: NumberBigIntType, autoincrement: true })
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   id: number;
 
@@ -30,11 +30,11 @@ export class UserEntity extends BaseEntity implements IUser {
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   lastName: string;
 
-  @Property()
+  @Property({ unique: true })
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   email: string;
 
-  @Property()
+  @Property({ unique: true })
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   phone?: string;
 
@@ -42,12 +42,12 @@ export class UserEntity extends BaseEntity implements IUser {
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   address?: string;
 
-  @Property()
+  @Property({ unique: true })
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   username: string;
 
   @Property()
-  @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
+  @Expose({ groups: [PlainGroupsEnum.ADMIN] })
   passwordHash: string;
 
   @Property()

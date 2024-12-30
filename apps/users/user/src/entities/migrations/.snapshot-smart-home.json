@@ -10,7 +10,7 @@
           "name": "id",
           "type": "text",
           "unsigned": false,
-          "autoincrement": false,
+          "autoincrement": true,
           "primary": false,
           "nullable": false,
           "mappedType": "text"

@@ -15,6 +15,7 @@
     "baseUrl": "./",
     "incremental": true,
     "strictNullChecks": false,
+    "strictPropertyInitialization": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,

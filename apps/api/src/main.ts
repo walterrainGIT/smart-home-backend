@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { ApiModule } from './api.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { RAILWAY_PUBLIC_DOMAIN, SWAGGER_PORT } from 'api/constants';
-import { PinoLoggerService } from '../../../libs/common/logger';
+import {API_BASE_SERVICE_NAME, RAILWAY_PUBLIC_DOMAIN, SWAGGER_PORT} from 'api/constants';
+import {HttpExceptionFilter, PinoLoggerService} from '../../../libs/common/logger';
 import { getServerConfig } from '../../../libs/common/modules';
 import { GRPC_API_PORT } from '@smart-home/libs/grpc';
 
@@ -13,14 +13,17 @@ async function bootstrap() {
   logger.log('Starting application...');
 
   const grpcApp = await NestFactory.createMicroservice<MicroserviceOptions>(ApiModule, getServerConfig({
-    serviceName: 'api',
+    serviceName: API_BASE_SERVICE_NAME,
     port: GRPC_API_PORT,
   }));
+  grpcApp.useGlobalFilters(new HttpExceptionFilter());
+  // Запуск gRPC сервиса
+  grpcApp.listen();
 
   const httpApp = await NestFactory.create(ApiModule, {
     logger: new PinoLoggerService(),
   });
-
+  httpApp.useGlobalFilters(new HttpExceptionFilter());
   // Конфигурация Swagger
   const config = new DocumentBuilder()
     .setTitle('Smart Home API')
@@ -36,9 +39,6 @@ async function bootstrap() {
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
   });
-
-  // Запуск gRPC сервиса
-  grpcApp.listen();
 
   // Запуск HTTP сервиса с использованием Railway-порта
   const port = SWAGGER_PORT || 3000;

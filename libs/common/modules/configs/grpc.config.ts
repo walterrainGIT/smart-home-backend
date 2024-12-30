@@ -22,7 +22,7 @@ export function getClientConfig(params: IDefineBaseGrpcConfig): ClientsModuleOpt
 
   return [
     {
-      name: `${params.serviceName.toUpperCase()}_PACKAGE`,
+      name: `${params.serviceName}_PACKAGE`,
       transport: baseGrpcConfig.transport,
       options: baseGrpcConfig.options,
     },

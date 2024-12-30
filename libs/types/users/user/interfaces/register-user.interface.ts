@@ -5,5 +5,5 @@ export interface IRegisterUser {
   phone?: string;
   address?: string;
   username: string;
-  passwordHash: string;
+  password: string;
 }
