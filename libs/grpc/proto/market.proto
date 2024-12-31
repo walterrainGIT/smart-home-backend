@@ -4,21 +4,6 @@ package market;
 
 import "pagination.proto"; // Импортируем общую пагинацию
 
-// Определение перечислений для типов и статусов лотов
-enum LotTypeEnum {
-  LOT_TYPE_UNKNOWN = 0;
-  LOT_TYPE_A = 1;
-  LOT_TYPE_B = 2;
-  // Добавьте остальные типы
-}
-
-enum LotStatusEnum {
-  LOT_STATUS_UNKNOWN = 0;
-  LOT_STATUS_ACTIVE = 1;
-  LOT_STATUS_INACTIVE = 2;
-  // Добавьте остальные статусы
-}
-
 // Определение сервиса для работы с лотами и продуктами
 service MarketService {
   rpc CreateLot(CreateLotRequest) returns (Lot);          // Создать лот
@@ -42,7 +27,7 @@ message CreateLotRequest {
   string shortDescription = 2;     // Краткое описание лота (необязательно)
   string description = 3;          // Описание лота (необязательно)
   string image = 4;                // Изображение лота (необязательно)
-  LotTypeEnum type = 5;            // Тип лота (обязательное)
+  string type = 5;            // Тип лота (обязательное)
   repeated int32 productsIds = 6;  // Идентификаторы продуктов (обязательное)
 }
 
@@ -60,10 +45,10 @@ message GetProductsResponse {
 // Запрос на получение списка лотов
 message GetLotsRequest {
   // Массив типов лотов (опционально)
-  repeated LotTypeEnum types = 1;
+  repeated string types = 1;
 
   // Массив статусов лотов (опционально)
-  repeated LotStatusEnum statuses = 2;
+  repeated string statuses = 2;
 
   // Параметры пагинации
   pagination.Pagination pagination = 3; // Параметры пагинации
@@ -83,8 +68,8 @@ message Lot {
   string description = 4;          // Описание (необязательно)
   double price = 5;                // Цена (необязательно)
   string image = 6;                // Изображение (необязательно)
-  LotTypeEnum type = 7;            // Тип лота
-  LotStatusEnum status = 8;        // Статус лота
+  string type = 7;            // Тип лота
+  string status = 8;        // Статус лота
   repeated Product products = 9;   // Список продуктов (если необходимо)
 }
 
