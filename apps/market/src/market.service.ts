@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {Collection, EntityManager} from '@mikro-orm/core';
 import {
     ICreateLot,
@@ -7,7 +7,9 @@ import {
     IGetProducts,
     ILot,
     ILotMetadataPagination,
-    IProduct, IProductMetadataPagination
+    IProduct,
+    IProductMetadataPagination,
+    LotStatusEnum
 } from "@smart-home/libs/types/market";
 import {IGetProductsByIds} from "@smart-home/libs/types/market/interfaces/get-products-by-ids.interface";
 import {LotEntity, ProductEntity} from "market/entities";
@@ -45,17 +47,19 @@ export class MarketService {
     }
 
     async createLot(params: ICreateLot): Promise<ILot> {
-            const {name, shortDescription, description, image, productsIds} = params;
+            const {name, type, shortDescription, description, image, productsIds} = params;
 
             const products = await this.getProductsByIds({ids: productsIds});
 
             const lot = new LotEntity();
             lot.name = name;
+            lot.type = type;
             if (shortDescription) lot.shortDescription = shortDescription;
             if (description) lot.description = description;
             if (image) lot.image = image;
             lot.products = new Collection<IProduct>(lot, products);
             lot.price = products.reduce((sum, product) => sum + product.price, 0);
+            lot.status = LotStatusEnum.CREATED;
 
             await this.em.fork().persistAndFlush(lot);
             return lot;

@@ -4,6 +4,21 @@ package market;
 
 import "pagination.proto"; // Импортируем общую пагинацию
 
+// Определение перечислений для типов и статусов лотов
+enum LotTypeEnum {
+  LOT_TYPE_UNKNOWN = 0;
+  LOT_TYPE_A = 1;
+  LOT_TYPE_B = 2;
+  // Добавьте остальные типы
+}
+
+enum LotStatusEnum {
+  LOT_STATUS_UNKNOWN = 0;
+  LOT_STATUS_ACTIVE = 1;
+  LOT_STATUS_INACTIVE = 2;
+  // Добавьте остальные статусы
+}
+
 // Определение сервиса для работы с лотами и продуктами
 service MarketService {
   rpc CreateLot(CreateLotRequest) returns (Lot);          // Создать лот
@@ -23,11 +38,12 @@ message CreateProductRequest {
 
 // Запрос на создание лота
 message CreateLotRequest {
-  string name = 1;                 // Название
-  string shortDescription = 2;     // Краткое описание (необязательно)
-  string description = 3;          // Описание (необязательно)
-  string image = 4;                // Изображение (необязательно)
-  repeated int32 productsIds = 5;   // Идентификаторы продуктов
+  string name = 1;                 // Название лота (обязательное)
+  string shortDescription = 2;     // Краткое описание лота (необязательно)
+  string description = 3;          // Описание лота (необязательно)
+  string image = 4;                // Изображение лота (необязательно)
+  LotTypeEnum type = 5;            // Тип лота (обязательное)
+  repeated int32 productsIds = 6;  // Идентификаторы продуктов (обязательное)
 }
 
 // Запрос на получение списка продуктов
@@ -43,7 +59,14 @@ message GetProductsResponse {
 
 // Запрос на получение списка лотов
 message GetLotsRequest {
-  pagination.Pagination pagination = 1; // Параметры пагинации
+  // Массив типов лотов (опционально)
+  repeated LotTypeEnum types = 1;
+
+  // Массив статусов лотов (опционально)
+  repeated LotStatusEnum statuses = 2;
+
+  // Параметры пагинации
+  pagination.Pagination pagination = 3; // Параметры пагинации
 }
 
 // Ответ на запрос списка лотов
@@ -60,7 +83,9 @@ message Lot {
   string description = 4;          // Описание (необязательно)
   double price = 5;                // Цена (необязательно)
   string image = 6;                // Изображение (необязательно)
-  repeated Product products = 7;   // Список продуктов
+  LotTypeEnum type = 7;            // Тип лота
+  LotStatusEnum status = 8;        // Статус лота
+  repeated Product products = 9;   // Список продуктов (если необходимо)
 }
 
 // Продукт

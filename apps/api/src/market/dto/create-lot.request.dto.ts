@@ -1,6 +1,6 @@
-import {ICreateLot} from "@smart-home/libs/types/market";
+import {ICreateLot, LotTypeEnum} from "@smart-home/libs/types/market";
 import {ApiProperty} from "@nestjs/swagger";
-import {IsArray, IsOptional, IsString} from "class-validator";
+import {IsArray, IsEnum, IsOptional, IsString} from "class-validator";
 
 export class CreateLotRequestDto implements ICreateLot {
     @ApiProperty({
@@ -13,6 +13,16 @@ export class CreateLotRequestDto implements ICreateLot {
     @IsString()
     @IsOptional()
     name: string;
+
+    @ApiProperty({
+        name: 'type',
+        enum: LotTypeEnum,
+        required: true,
+        description: 'type',
+    })
+    @IsEnum(LotTypeEnum)
+    @IsOptional()
+    type: LotTypeEnum;
 
     @ApiProperty({
         name: 'shortDescription',

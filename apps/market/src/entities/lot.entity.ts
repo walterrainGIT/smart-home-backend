@@ -9,7 +9,7 @@ import {Exclude, Expose, Transform, TransformFnParams} from 'class-transformer';
 import { BaseEntity, NumberBigIntType } from '@smart-home/libs/common/database';
 import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
 import {LotRepository} from "./repositories";
-import {ILot, IProduct} from "@smart-home/libs/types/market";
+import {ILot, IProduct, LotStatusEnum, LotTypeEnum} from "@smart-home/libs/types/market";
 import {ProductEntity} from "market/entities/product.entity";
 
 @Entity({
@@ -23,6 +23,10 @@ export class LotEntity extends BaseEntity implements ILot {
   @PrimaryKey({ type: NumberBigIntType, autoincrement: true })
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   id: number;
+
+  @Property()
+  @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
+  type: LotTypeEnum;
 
   @Property()
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
@@ -43,6 +47,10 @@ export class LotEntity extends BaseEntity implements ILot {
   @Property()
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   image?: string;
+
+  @Property()
+  @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
+  status: LotStatusEnum;
 
   @ManyToMany(() => ProductEntity, 'lots', {
     joinColumn: 'product_id',

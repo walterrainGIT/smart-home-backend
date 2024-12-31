@@ -12,11 +12,19 @@ import {IGetLots, ILot, ILotMetadataPagination} from "@smart-home/libs/types/mar
 
 export class LotRepository extends SqlEntityRepository<LotEntity> {
   async getLots(params: IGetLots): Promise<ILotMetadataPagination> {
-    const { pagination } = params;
+    const { pagination, types, statuses } = params;
     const { limit, offset } = pagination;
 
     const qb = this.em.createQueryBuilder(LotEntity)
+        .innerJoinAndSelect('products', 'products')
         .limit(limit, offset);
+
+    if(types) qb.andWhere({ type: {
+      $in: types,
+      }})
+    if(statuses) qb.andWhere({ status: {
+        $in: statuses,
+      }})
 
     const [lots, total] = await qb.getResultAndCount();
 

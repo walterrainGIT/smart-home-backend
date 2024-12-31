@@ -1,7 +1,7 @@
-import {ILot, ILotMetadataPagination} from "@smart-home/libs/types/market";
+import {ILot, ILotMetadataPagination, LotStatusEnum, LotTypeEnum} from "@smart-home/libs/types/market";
 import {Collection} from "@mikro-orm/core";
 import {ApiProperty} from "@nestjs/swagger";
-import {IsArray, IsNumber, IsObject, IsOptional, IsString, ValidateNested} from "class-validator";
+import {IsArray, IsEnum, IsNumber, IsObject, IsOptional, IsString, ValidateNested} from "class-validator";
 import {MetadataPaginationResponseDto} from "@smart-home/libs/common/dtos/metadata-pagination.response.dto";
 import {Type} from "class-transformer";
 import {ProductResponseDto} from "api/market/dto/product.response.dto";
@@ -18,6 +18,16 @@ export class LotResponseDto implements ILot {
     @IsNumber()
     @IsOptional()
     id: number;
+
+    @ApiProperty({
+        name: 'type',
+        enum: LotTypeEnum,
+        required: true,
+        description: 'type',
+    })
+    @IsEnum(LotTypeEnum)
+    @IsOptional()
+    type: LotTypeEnum;
 
     @ApiProperty({
         name: 'name',
@@ -74,6 +84,16 @@ export class LotResponseDto implements ILot {
     @IsString()
     @IsOptional()
     image?: string;
+
+    @ApiProperty({
+        name: 'status',
+        enum: LotStatusEnum,
+        required: true,
+        description: 'status',
+    })
+    @IsEnum(LotStatusEnum)
+    @IsOptional()
+    status: LotStatusEnum;
 
     @ApiProperty({
         name: 'products',
