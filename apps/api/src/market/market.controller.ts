@@ -1,15 +1,16 @@
 import {Body, Controller, HttpStatus, Post, UseGuards} from '@nestjs/common';
 import { MarketService } from './market.service';
 import {ApiBearerAuth, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {JwtAuthGuard} from "api/users/user/auth/jwt-auth-guard";
+import {JwtAuthGuard, UserRoles} from "api/users/user/auth/jwt-auth-guard";
 import {CreateProductRequestDto, ProductMetadataPaginationResponseDto, ProductResponseDto, CreateLotRequestDto, LotMetadataPaginationResponseDto, LotResponseDto, GetProductsRequestDto, GetLotsRequestDto} from "api/market/dto";
+import {UserRoleEnum} from "@smart-home/libs/types/users/user";
 
 @Controller('market')
 @ApiTags('market')
 export class MarketController {
   constructor(private readonly marketService: MarketService) {}
 
-  @Post()
+  @Post('product/create')
   @ApiResponse({
     status: HttpStatus.OK,
     type: ProductResponseDto,
@@ -17,13 +18,14 @@ export class MarketController {
   })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @UserRoles(UserRoleEnum.ADMIN)
   createProduct(
       @Body() body: CreateProductRequestDto
   ): Promise<ProductResponseDto> {
     return this.marketService.createProduct(body);
   }
 
-  @Post()
+  @Post('lot/create')
   @ApiResponse({
     status: HttpStatus.OK,
     type: LotResponseDto,
@@ -31,13 +33,14 @@ export class MarketController {
   })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @UserRoles(UserRoleEnum.ADMIN)
   createLot(
       @Body() body: CreateLotRequestDto
   ): Promise<LotResponseDto> {
     return this.marketService.createLot(body);
   }
 
-  @Post()
+  @Post('product/get')
   @ApiResponse({
     status: HttpStatus.OK,
     type: ProductMetadataPaginationResponseDto,
@@ -51,7 +54,7 @@ export class MarketController {
     return this.marketService.getProducts(body);
   }
 
-  @Post()
+  @Post('lot/get')
   @ApiResponse({
     status: HttpStatus.OK,
     type: LotMetadataPaginationResponseDto,

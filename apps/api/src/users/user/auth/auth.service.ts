@@ -27,7 +27,7 @@ export class AuthService {
     }
 
     async generateToken(params: UserResponseDto) {
-      const {id, username, email} = params;
+      const { id, username, email } = params;
 
       return this.jwtService.sign({ id, username, email }, {
           secret: JWT_SECRET_KEY,
