@@ -1,32 +1,31 @@
-import { Controller } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { GrpcMethod } from '@nestjs/microservices';
+import {Controller} from '@nestjs/common';
+import {AuthService} from './auth.service';
+import {GrpcMethod} from '@nestjs/microservices';
 import {IGetUserById, ILoginUser, IRegisterUser, IUser} from '@smart-home/libs/types/users/user';
-import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
-import { instanceToPlain } from 'class-transformer';
+import {PlainGroupsEnum} from '@smart-home/libs/common/enums';
+import {UserService} from "user/user.service";
+import {TransformWithGroup} from "@smart-home/libs/common/decorators";
 
 @Controller('User')
 export class UserController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+              private readonly userService: UserService) {}
 
-  @GrpcMethod('AuthService', 'RegisterUser')
+  @GrpcMethod('UserService', 'RegisterUser')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
   async registerUser(params: IRegisterUser): Promise<IUser> {
-    const user = await this.authService.registerUser(params);
-
-    return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
+    return this.authService.registerUser(params);
   }
 
-  @GrpcMethod('AuthService', 'LoginUser')
+  @GrpcMethod('UserService', 'LoginUser')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
   async loginUser(params: ILoginUser): Promise<IUser> {
-    const user = await this.authService.loginUser(params);
-
-    return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
+    return this.authService.loginUser(params);
   }
 
-  @GrpcMethod('AuthService', 'GetUserById')
+  @GrpcMethod('UserService', 'GetUserById')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC, PlainGroupsEnum.ADMIN])
   async getUserById(params: IGetUserById): Promise<IUser> {
-    const user = await this.authService.getUserById(params);
-
-    return instanceToPlain(user, { groups: [PlainGroupsEnum.PUBLIC], enableCircularCheck: true }) as IUser;
+    return this.userService.getUserById(params);
   }
 }

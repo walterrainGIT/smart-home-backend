@@ -3,4 +3,5 @@ export interface ICreateProduct {
     shortDescription?: string;
     description?: string;
     image?: string;
+    price: number;
 }

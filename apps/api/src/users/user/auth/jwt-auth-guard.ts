@@ -14,6 +14,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {
         super();
     }
 
+
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const roles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
             context.getHandler(),
@@ -24,6 +25,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {
             return await super.canActivate(context) as boolean;
         }
 
+        await super.canActivate(context);
         const request = context.switchToHttp().getRequest();
         const user = request.user;
 
@@ -31,9 +33,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {
             return false;
         }
 
-        const { role: userRole }= await this.userService.getUserById(user.id);
+        const { role: userRole } = await this.userService.getUserById({ id: user.userId });
 
-        return roles.some(role => userRole.includes(role));
+        return roles.some(role => role === userRole);
     }
 }
 

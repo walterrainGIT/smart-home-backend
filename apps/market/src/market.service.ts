@@ -31,31 +31,33 @@ export class MarketService {
     }
 
     async createProduct(params: ICreateProduct): Promise<IProduct> {
-        const { name, shortDescription, description, image } = params;
+            const {name, shortDescription, description, image, price} = params;
 
-        const product = new ProductEntity();
-        product.name = name;
-        if(shortDescription) product.shortDescription = shortDescription;
-        if(description) product.description = description;
-        if(image) product.image = image;
+            const product = new ProductEntity();
+            product.name = name;
+            if (shortDescription) product.shortDescription = shortDescription;
+            if (description) product.description = description;
+            if (image) product.image = image;
+            product.price = price;
 
-        await this.em.fork().persistAndFlush(product);
-        return product;
+            await this.em.fork().persistAndFlush(product);
+            return product;
     }
 
     async createLot(params: ICreateLot): Promise<ILot> {
-      const { name, shortDescription, description, image, productsIds } = params;
+            const {name, shortDescription, description, image, productsIds} = params;
 
-      const products = await this.getProductsByIds({ ids: productsIds });
+            const products = await this.getProductsByIds({ids: productsIds});
 
-      const lot = new LotEntity();
-      lot.name = name;
-      if(shortDescription) lot.shortDescription = shortDescription;
-      if(description) lot.description = description;
-      if(image) lot.image = image;
-      lot.products = new Collection<IProduct>(lot, products);
+            const lot = new LotEntity();
+            lot.name = name;
+            if (shortDescription) lot.shortDescription = shortDescription;
+            if (description) lot.description = description;
+            if (image) lot.image = image;
+            lot.products = new Collection<IProduct>(lot, products);
+            lot.price = products.reduce((sum, product) => sum + product.price, 0);
 
-      await this.em.fork().persistAndFlush(lot);
-      return lot;
+            await this.em.fork().persistAndFlush(lot);
+            return lot;
     }
 }

@@ -47,11 +47,11 @@ export class UserEntity extends BaseEntity implements IUser {
   username: string;
 
   @Property()
-  @Expose({ groups: [PlainGroupsEnum.ADMIN] })
+  @Expose({ groups: [PlainGroupsEnum.PRIVATE] })
   passwordHash: string;
 
   @Property()
-  @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
+  @Expose({ groups: [PlainGroupsEnum.ADMIN] })
   role: UserRoleEnum;
 
   @Property()

@@ -17,7 +17,8 @@ message CreateProductRequest {
   string name = 1;                 // Название
   string shortDescription = 2;     // Краткое описание (необязательно)
   string description = 3;          // Описание (необязательно)
-  string image = 4;                // Изображение (необязательно)
+  string image = 4;                // Изображение (необязательное)
+  int32 price = 5;                // Цена
 }
 
 // Запрос на создание лота
@@ -26,29 +27,29 @@ message CreateLotRequest {
   string shortDescription = 2;     // Краткое описание (необязательно)
   string description = 3;          // Описание (необязательно)
   string image = 4;                // Изображение (необязательно)
-  repeated int32 productIds = 5;   // Идентификаторы продуктов
+  repeated int32 productsIds = 5;   // Идентификаторы продуктов
 }
 
 // Запрос на получение списка продуктов
 message GetProductsRequest {
-  common.Pagination pagination = 1; // Параметры пагинации
+  pagination.Pagination pagination = 1; // Параметры пагинации
 }
 
 // Ответ на запрос списка продуктов
 message GetProductsResponse {
   repeated Product products = 1;           // Список продуктов
-  common.PaginationResponse pagination = 2; // Метаданные пагинации
+  pagination.PaginationResponse metadata = 2; // Метаданные пагинации
 }
 
 // Запрос на получение списка лотов
 message GetLotsRequest {
-  common.Pagination pagination = 1; // Параметры пагинации
+  pagination.Pagination pagination = 1; // Параметры пагинации
 }
 
 // Ответ на запрос списка лотов
 message GetLotsResponse {
   repeated Lot lots = 1;                  // Список лотов
-  common.PaginationResponse pagination = 2; // Метаданные пагинации
+  pagination.PaginationResponse metadata = 2; // Метаданные пагинации
 }
 
 // Лот

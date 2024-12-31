@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package common; // Общий пакет для повторно используемых компонентов
+package pagination; // Общий пакет для повторно используемых компонентов
 
 // Параметры пагинации
 message Pagination {

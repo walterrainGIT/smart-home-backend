@@ -4,52 +4,52 @@ import {IsArray, IsOptional, IsString} from "class-validator";
 
 export class CreateLotRequestDto implements ICreateLot {
     @ApiProperty({
-        name: 'firstName',
+        name: 'name',
         type: String,
         required: true,
-        description: 'firstName',
-        example: 'firstName',
+        description: 'name',
+        example: 'name',
     })
     @IsString()
     @IsOptional()
     name: string;
 
     @ApiProperty({
-        name: 'firstName',
+        name: 'shortDescription',
         type: String,
         required: true,
-        description: 'firstName',
-        example: 'firstName',
+        description: 'shortDescription',
+        example: 'shortDescription',
     })
     @IsString()
     @IsOptional()
     shortDescription?: string;
 
     @ApiProperty({
-        name: 'firstName',
+        name: 'description',
         type: String,
         required: true,
-        description: 'firstName',
-        example: 'firstName',
+        description: 'description',
+        example: 'description',
     })
     @IsString()
     @IsOptional()
     description?: string;
 
     @ApiProperty({
-        name: 'firstName',
+        name: 'image',
         type: String,
         required: true,
-        description: 'firstName',
-        example: 'firstName',
+        description: 'image',
+        example: 'image',
     })
     @IsString()
     @IsOptional()
     image?: string;
 
     @ApiProperty({
-        name: 'ids',
-        description: 'ids',
+        name: 'productsIds',
+        description: 'productsIds',
         isArray: true,
         example: [1, 2],
         required: false,

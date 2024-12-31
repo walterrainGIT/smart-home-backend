@@ -1,9 +1,10 @@
-import {Body, Controller, HttpStatus, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, HttpStatus, Post, Req, Res, UseGuards} from '@nestjs/common';
 import { MarketService } from './market.service';
 import {ApiBearerAuth, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {JwtAuthGuard, UserRoles} from "api/users/user/auth/jwt-auth-guard";
 import {CreateProductRequestDto, ProductMetadataPaginationResponseDto, ProductResponseDto, CreateLotRequestDto, LotMetadataPaginationResponseDto, LotResponseDto, GetProductsRequestDto, GetLotsRequestDto} from "api/market/dto";
 import {UserRoleEnum} from "@smart-home/libs/types/users/user";
+import {Response} from "express";
 
 @Controller('market')
 @ApiTags('market')
@@ -20,7 +21,7 @@ export class MarketController {
   @UseGuards(JwtAuthGuard)
   @UserRoles(UserRoleEnum.ADMIN)
   createProduct(
-      @Body() body: CreateProductRequestDto
+      @Body() body: CreateProductRequestDto,
   ): Promise<ProductResponseDto> {
     return this.marketService.createProduct(body);
   }
@@ -46,8 +47,6 @@ export class MarketController {
     type: ProductMetadataPaginationResponseDto,
     description: 'Returns products',
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   getProducts(
       @Body() body: GetProductsRequestDto
   ): Promise<ProductMetadataPaginationResponseDto> {
@@ -60,8 +59,6 @@ export class MarketController {
     type: LotMetadataPaginationResponseDto,
     description: 'Returns lots',
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   getLots(
       @Body() body: GetLotsRequestDto
   ): Promise<LotMetadataPaginationResponseDto> {

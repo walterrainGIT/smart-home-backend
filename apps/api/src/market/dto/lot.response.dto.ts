@@ -20,43 +20,43 @@ export class LotResponseDto implements ILot {
     id: number;
 
     @ApiProperty({
-        name: 'firstName',
+        name: 'name',
         type: String,
         required: true,
-        description: 'firstName',
-        example: 'firstName',
+        description: 'name',
+        example: 'name',
     })
     @IsString()
     @IsOptional()
     name: string;
 
     @ApiProperty({
-        name: 'firstName',
+        name: 'shortDescription',
         type: String,
         required: true,
-        description: 'firstName',
-        example: 'firstName',
+        description: 'shortDescription',
+        example: 'shortDescription',
     })
     @IsString()
     @IsOptional()
     shortDescription?: string;
 
     @ApiProperty({
-        name: 'firstName',
+        name: 'description',
         type: String,
         required: true,
-        description: 'firstName',
-        example: 'firstName',
+        description: 'description',
+        example: 'description',
     })
     @IsString()
     @IsOptional()
     description?: string;
 
     @ApiProperty({
-        name: 'id',
+        name: 'price',
         type: Number,
         required: true,
-        description: 'id',
+        description: 'price',
         example: 1,
     })
     @Type(() => Number)
@@ -65,11 +65,11 @@ export class LotResponseDto implements ILot {
     price?: number;
 
     @ApiProperty({
-        name: 'firstName',
+        name: 'image',
         type: String,
         required: true,
-        description: 'firstName',
-        example: 'firstName',
+        description: 'image',
+        example: 'image',
     })
     @IsString()
     @IsOptional()

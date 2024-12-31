@@ -7,6 +7,7 @@ import {USER_BASE_SERVICE_NAME} from '@smart-home/libs/common/constants';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { mikroOrmConfig, entities } from 'user/configs/mikro-orm.config';
 import {getClientConfig} from "@smart-home/libs/common/modules/configs";
+import {UserService} from "user/user.service";
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import {getClientConfig} from "@smart-home/libs/common/modules/configs";
   ],
   controllers: [UserController],
   providers: [
-      AuthService
+      AuthService,
+    UserService,
   ],
 })
 export class UserModule {}

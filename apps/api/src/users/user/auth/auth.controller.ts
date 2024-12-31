@@ -10,7 +10,7 @@ import {JwtAuthGuard} from "api/users/user/auth/jwt-auth-guard";
 export class AuthController {
   constructor(private readonly userService: AuthService) {}
 
-  @Post()
+  @Post('register')
   @ApiResponse({
     status: HttpStatus.OK,
     type: UserResponseDto,
@@ -28,7 +28,6 @@ export class AuthController {
     type: UserResponseDto,
     description: 'Returns logged user',
   })
-
   async loginUser(
       @Body() body: LoginUserRequestDto,
       @Res({ passthrough: true }) response: Response,

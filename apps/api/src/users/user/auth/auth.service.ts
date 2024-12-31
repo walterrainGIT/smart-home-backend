@@ -5,7 +5,6 @@ import { GrpcUserService } from "@smart-home/libs/grpc";
 import { RegisterUserRequestDto, LoginUserRequestDto, UserResponseDto } from "api/users/user/dto";
 import {JWT_SECRET_KEY, JWT_TTL, USER_BASE_SERVICE_NAME} from "@smart-home/libs/common/constants";
 import { PinoLoggerService} from "@smart-home/libs/common/logger";
-import {IGetUserById} from "@smart-home/libs/types/users/user";
 import {JwtService} from "@nestjs/jwt";
 
 @Injectable()
