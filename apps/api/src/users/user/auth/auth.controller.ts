@@ -35,9 +35,9 @@ export class AuthController {
     const user = await this.userService.loginUser(body);
 
     response.cookie('token', await this.userService.generateToken(user), {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
     });
 
     return user;
@@ -48,9 +48,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('token', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
     });
 
     return { message: 'Logout successful' };
