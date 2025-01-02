@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
-import {PortfolioService} from "./portfolio.service";
-import {CustomerService} from "./customer.service";
+import {PortfolioService} from "./services/portfolio.service";
+import {CustomerService} from "./services/customer.service";
 import {
   ICreateCustomer,
   ICreatePortfolio, ICustomer, ICustomerMetadataPagination, IDeleteCustomer,

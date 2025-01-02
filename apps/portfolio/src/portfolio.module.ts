@@ -7,9 +7,9 @@ import {
 } from '@smart-home/libs/common/constants';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import {getClientConfig} from "@smart-home/libs/common/modules/configs";
-import {PortfolioService} from "./portfolio.service";
+import {PortfolioService} from "./services/portfolio.service";
 import {mikroOrmConfig, entities} from "./configs/mikro-orm.config";
-import {CustomerService} from "./customer.service";
+import {CustomerService} from "./services/customer.service";
 
 @Module({
   imports: [

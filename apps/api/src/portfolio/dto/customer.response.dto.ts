@@ -51,18 +51,6 @@ export class CustomerResponseDto implements ICustomer {
     @IsString()
     @IsOptional()
     logo?: string;
-
-    @ApiProperty({
-        name: 'portfolios',
-        required: false,
-        description: 'portfolios',
-        type: [PortfolioResponseDto],
-    })
-    @IsOptional()
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => PortfolioResponseDto)
-    portfolios?: Collection<PortfolioResponseDto> | PortfolioResponseDto[];
 }
 
 export class CustomerMetadataPaginationResponseDto implements ICustomerMetadataPagination {

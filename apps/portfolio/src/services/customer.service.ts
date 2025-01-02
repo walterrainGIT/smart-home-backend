@@ -6,7 +6,7 @@ import {
     IGetCustomerById, IGetCustomers,
     IUpdateCustomer,
 } from "@smart-home/libs/types/portfolio";
-import {CustomerEntity} from "./entities";
+import {CustomerEntity} from "../entities";
 
 @Injectable()
 export class CustomerService {

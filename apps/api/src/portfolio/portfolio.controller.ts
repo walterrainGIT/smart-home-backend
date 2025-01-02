@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, HttpStatus, Patch, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, HttpStatus, Patch, Post, Query, UseGuards} from '@nestjs/common';
 import { PortfolioService } from './portfolio.service';
 import {ApiBearerAuth, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {JwtAuthGuard, UserRoles} from "api/users/user/auth/jwt-auth-guard";
@@ -73,9 +73,9 @@ export class PortfolioController {
   @UseGuards(JwtAuthGuard)
   @UserRoles(UserRoleEnum.ADMIN)
   deleteCustomer(
-      @Body() body: DeleteCustomerRequestDto,
+      @Query() query: DeleteCustomerRequestDto,
   ): Promise<CustomerResponseDto> {
-    return this.portfolioService.deleteCustomer(body);
+    return this.portfolioService.deleteCustomer(query);
   }
 
   @Post('portfolio/get')
@@ -130,8 +130,8 @@ export class PortfolioController {
   @UseGuards(JwtAuthGuard)
   @UserRoles(UserRoleEnum.ADMIN)
   deletePortfolio(
-      @Body() body: DeletePortfolioRequestDto,
+      @Query() query: DeletePortfolioRequestDto,
   ): Promise<PortfolioResponseDto> {
-    return this.portfolioService.deletePortfolio(body);
+    return this.portfolioService.deletePortfolio(query);
   }
 }

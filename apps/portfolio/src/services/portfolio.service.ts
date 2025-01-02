@@ -7,7 +7,7 @@ import {
     IPortfolio, IPortfolioMetadataPagination,
     IUpdatePortfolio
 } from "@smart-home/libs/types/portfolio";
-import {PortfolioEntity} from "./entities";
+import {PortfolioEntity} from "../entities";
 import {CustomerService} from "./customer.service";
 
 @Injectable()
@@ -38,7 +38,7 @@ export class PortfolioService {
         portfolio.customer = await this.customerService.getCustomerById({ id: customerId });
         if(images) portfolio.images = images;
 
-        await this.em.persistAndFlush(portfolio);
+        await this.em.fork().persistAndFlush(portfolio);
         return portfolio;
     }
 
@@ -52,7 +52,7 @@ export class PortfolioService {
         if(customerId) portfolio.customer = await this.customerService.getCustomerById({ id: customerId });
         if(images) portfolio.images = images;
 
-        await this.em.persistAndFlush(portfolio);
+        await this.em.fork().persistAndFlush(portfolio);
         return portfolio;
     }
 }
