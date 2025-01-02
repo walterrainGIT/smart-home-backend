@@ -28,6 +28,7 @@ export class PortfolioRepository extends SqlEntityRepository<PortfolioEntity> {
     const { limit, offset } = pagination;
 
     const qb = this.em.createQueryBuilder(PortfolioEntity)
+        .innerJoinAndSelect('customer', 'customer')
         .limit(limit, offset);
 
     const [portfolios, total] = await qb.getResultAndCount();
