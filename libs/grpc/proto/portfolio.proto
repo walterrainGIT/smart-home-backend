@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package portfolio;
+
+import "pagination.proto"; // Общий модуль для работы с пагинацией
+
+// Сервис для управления клиентами и портфолио
+service PortfolioService {
+  // Методы для работы с клиентами
+  rpc GetCustomerById(GetCustomerByIdRequest) returns (Customer);
+  rpc GetCustomers(GetCustomersRequest) returns (GetCustomersResponse);
+  rpc CreateCustomer(CreateCustomerRequest) returns (Customer);
+  rpc UpdateCustomer(UpdateCustomerRequest) returns (Customer);
+  rpc DeleteCustomer(DeleteCustomerRequest) returns (Customer);
+
+  // Методы для работы с портфолио
+  rpc GetPortfolioById(GetPortfolioByIdRequest) returns (Portfolio);
+  rpc GetPortfolios(GetPortfoliosRequest) returns (GetPortfoliosResponse);
+  rpc CreatePortfolio(CreatePortfolioRequest) returns (Portfolio);
+  rpc UpdatePortfolio(UpdatePortfolioRequest) returns (Portfolio);
+  rpc DeletePortfolio(DeletePortfolioRequest) returns (Portfolio);
+}
+
+// Запросы и ответы для работы с клиентами
+message GetCustomerByIdRequest {
+  int32 id = 1; // Идентификатор клиента
+}
+
+message GetCustomersRequest {
+  pagination.Pagination pagination = 1; // Параметры пагинации
+}
+
+message GetCustomersResponse {
+  repeated Customer customers = 1;             // Список клиентов
+  pagination.PaginationResponse metadata = 2; // Метаданные пагинации
+}
+
+message CreateCustomerRequest {
+  string name = 1;         // Имя клиента
+  string description = 2;  // Описание клиента
+  string logo = 3;         // Логотип (опционально)
+}
+
+message UpdateCustomerRequest {
+  int32 id = 1;            // Идентификатор клиента
+  string name = 2;         // Имя клиента (опционально)
+  string description = 3;  // Описание клиента (опционально)
+  string logo = 4;         // Логотип (опционально)
+}
+
+message DeleteCustomerRequest {
+  int32 id = 1; // Идентификатор клиента
+}
+
+// Запросы и ответы для работы с портфолио
+message GetPortfolioByIdRequest {
+  int32 id = 1; // Идентификатор портфолио
+}
+
+message GetPortfoliosRequest {
+  repeated int32 customersIds = 1;      // Список идентификаторов клиентов
+  pagination.Pagination pagination = 2; // Параметры пагинации
+}
+
+message GetPortfoliosResponse {
+  repeated Portfolio portfolios = 1;        // Список портфолио
+  pagination.PaginationResponse metadata = 2; // Метаданные пагинации
+}
+
+message CreatePortfolioRequest {
+  string name = 1;         // Название портфолио
+  string description = 2;  // Описание портфолио
+  int32 customerId = 3;    // Идентификатор клиента
+  repeated string images = 4; // Список изображений (опционально)
+}
+
+message UpdatePortfolioRequest {
+  int32 id = 1;            // Идентификатор портфолио
+  string name = 2;         // Название (опционально)
+  string description = 3;  // Описание (опционально)
+  int32 customerId = 4;    // Идентификатор клиента (опционально)
+  repeated string images = 5; // Список изображений (опционально)
+}
+
+message DeletePortfolioRequest {
+  int32 id = 1; // Идентификатор портфолио
+}
+
+// Определения сущностей
+message Customer {
+  int32 id = 1;             // Идентификатор клиента
+  string name = 2;          // Имя клиента
+  string description = 3;   // Описание клиента
+  string logo = 4;          // Логотип (опционально)
+  repeated Portfolio portfolios = 5; // Список портфолио клиента
+}
+
+message Portfolio {
+  int32 id = 1;             // Идентификатор портфолио
+  string name = 2;          // Название портфолио
+  string description = 3;   // Описание портфолио
+  repeated string images = 4; // Изображения
+  Customer customer = 5;    // Клиент, которому принадлежит портфолио
+}

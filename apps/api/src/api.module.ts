@@ -10,6 +10,7 @@ import {JwtModule} from "@nestjs/jwt";
 import {JwtStrategy} from "api/users/user/auth/jwt-strategy";
 import {MarketModule} from "api/market/market.module";
 import {UserModule} from "api/users/user/user.module";
+import {PortfolioModule} from "api/portfolio/portfolio.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import {UserModule} from "api/users/user/user.module";
     }),
     UserModule,
     MarketModule,
+    PortfolioModule,
   ],
   controllers: [ApiController],
   providers: [

@@ -36,6 +36,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/market/tsconfig.app.json"
       }
+    },
+    "portfolio": {
+      "type": "application",
+      "root": "apps/portfolio",
+      "entryFile": "main",
+      "sourceRoot": "apps/portfolio/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/portfolio/tsconfig.app.json"
+      }
     }
   }
 }

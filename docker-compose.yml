@@ -6,33 +6,21 @@ services:
       dockerfile: apps/api/Dockerfile
     ports:
       - "3000:3000"
-  feedback:
+  user:
     build:
       context: .
-      dockerfile: apps/feedback/Dockerfile
+      dockerfile: apps/user/Dockerfile
     ports:
       - "3001:3001"
-  info:
+  market:
     build:
       context: .
-      dockerfile: apps/info/Dockerfile
+      dockerfile: apps/market/Dockerfile
     ports:
       - "3002:3002"
-  pricing:
+  portfolio:
     build:
       context: .
-      dockerfile: apps/pricing/Dockerfile
+      dockerfile: apps/portfolio/Dockerfile
     ports:
       - "3003:3003"
-  projects:
-    build:
-      context: .
-      dockerfile: apps/projects/Dockerfile
-    ports:
-      - "3004:3004"
-  services:
-      build:
-        context: .
-        dockerfile: apps/services/Dockerfile
-      ports:
-        - "3005:3005"
