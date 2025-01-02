@@ -7,6 +7,7 @@ service UserService {
   rpc RegisterUser (RegisterUser) returns (UserResponse); // Метод регистрации пользователя
   rpc LoginUser (LoginUser) returns (UserResponse); // Метод логина пользователя
   rpc GetUserById (GetUserById) returns (UserResponse); // Метод запроса пользователя по id
+  rpc UpdateUser (UpdateUser) returns (UserResponse); // Метод обновления данных пользователя
 }
 
 // Запрос на регистрацию пользователя
@@ -29,6 +30,16 @@ message LoginUser {
 // Запрос пользователя
 message GetUserById {
   string id = 1;      // Id пользователя
+}
+
+// Запрос на обновление данных пользователя
+message UpdateUser {
+  string userId = 1;                // ID пользователя отправляющего запрос(обязательное)
+  string firstName = 2;         // Имя (необязательное)
+  string lastName = 3;          // Фамилия (необязательное)
+  string phone = 4;             // Телефон (необязательное)
+  string address = 5;           // Адрес (необязательное)
+  string username = 6;          // Имя пользователя (необязательное)
 }
 
 // Ответ на запрос пользователя (информация о зарегистрированном пользователе)

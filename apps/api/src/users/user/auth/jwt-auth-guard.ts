@@ -44,7 +44,7 @@ export const User = createParamDecorator(
         const request = ctx.switchToHttp().getRequest();
         const user = request.user;
 
-        return data ? user?.[data] : user;
+        return data ? user?.[data].userId : user.userId;
     },
 );
 

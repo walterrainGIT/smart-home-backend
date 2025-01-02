@@ -2,10 +2,10 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { GrpcUserService } from "@smart-home/libs/grpc";
-import { UserResponseDto } from "api/users/user/dto";
+import {GetUserByIdRequestDto, UpdateUserRequestDto, UserResponseDto} from "api/users/user/dto";
 import { USER_BASE_SERVICE_NAME} from "@smart-home/libs/common/constants";
 import { PinoLoggerService} from "@smart-home/libs/common/logger";
-import {IGetUserById} from "@smart-home/libs/types/users/user";
+import {IGetUserById, IUpdateUser, IUser} from "@smart-home/libs/types/users/user";
 
 @Injectable()
 export class UserService {
@@ -20,7 +20,11 @@ export class UserService {
         this.userService = this.userClient.getService<GrpcUserService>('UserService');
     }
 
-    async getUserById(params: IGetUserById): Promise<UserResponseDto> {
+    async getUserById(params: GetUserByIdRequestDto): Promise<UserResponseDto> {
         return firstValueFrom(this.userService.getUserById(params));
+    }
+
+    async updateUser(userId: number, params: UpdateUserRequestDto): Promise<UserResponseDto> {
+        return firstValueFrom(this.userService.updateUser({ userId, ...params }));
     }
 }

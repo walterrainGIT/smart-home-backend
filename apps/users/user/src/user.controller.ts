@@ -1,7 +1,7 @@
 import {Controller} from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {GrpcMethod} from '@nestjs/microservices';
-import {IGetUserById, ILoginUser, IRegisterUser, IUser} from '@smart-home/libs/types/users/user';
+import {IGetUserById, ILoginUser, IRegisterUser, IUpdateUser, IUser} from '@smart-home/libs/types/users/user';
 import {PlainGroupsEnum} from '@smart-home/libs/common/enums';
 import {UserService} from "user/user.service";
 import {TransformWithGroup} from "@smart-home/libs/common/decorators";
@@ -27,5 +27,11 @@ export class UserController {
   @TransformWithGroup([PlainGroupsEnum.PUBLIC, PlainGroupsEnum.ADMIN])
   async getUserById(params: IGetUserById): Promise<IUser> {
     return this.userService.getUserById(params);
+  }
+
+  @GrpcMethod('UserService', 'UpdateUser')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC, PlainGroupsEnum.ADMIN])
+  async updateUser(params: IUpdateUser): Promise<IUser> {
+    return this.userService.updateUser(params);
   }
 }

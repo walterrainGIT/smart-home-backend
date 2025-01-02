@@ -2,7 +2,14 @@ import {
   SqlEntityRepository,
 } from '@mikro-orm/postgresql';
 import { UserEntity } from 'user/entities';
-import {IGetUserById, IGetUserByParams, IRegisterUser, IUser, UserRoleEnum} from "@smart-home/libs/types/users/user";
+import {
+  IGetUserById,
+  IGetUserByParams,
+  IRegisterUser,
+  IUpdateUser,
+  IUser,
+  UserRoleEnum
+} from "@smart-home/libs/types/users/user";
 import * as bcrypt from 'bcrypt';
 import {PASSWORD_SALT} from "user/constants";
 import {RpcException} from "@nestjs/microservices";
@@ -18,6 +25,19 @@ export class UserRepository extends SqlEntityRepository<UserEntity> {
       throw new RpcException('ERRORS.USER.USER_NOT_FOUND');
     }
 
+    return user;
+  }
+
+  async updateUser(params: IUpdateUser): Promise<IUser> {
+    const { userId, firstName, lastName, phone, address } = params;
+
+    const user = await this.getUserById({ id: userId });
+    if(firstName) user.firstName = firstName;
+    if(lastName) user.lastName = lastName;
+    if(phone) user.phone = phone;
+    if(address) user.address = address;
+
+    await this.em.persistAndFlush(user);
     return user;
   }
 
