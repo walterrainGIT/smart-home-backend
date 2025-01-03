@@ -1,10 +1,23 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import {ClientGrpc, GrpcMethod} from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import {MARKET_BASE_SERVICE_NAME} from "@smart-home/libs/common/constants";
 import { PinoLoggerService} from "@smart-home/libs/common/logger";
 import {GrpcMarketService} from "@smart-home/libs/grpc/services/grpc-market.service";
-import {CreateProductRequestDto, ProductMetadataPaginationResponseDto, ProductResponseDto, CreateLotRequestDto, LotMetadataPaginationResponseDto, LotResponseDto, GetProductsRequestDto, GetLotsRequestDto} from "api/market/dto";
+import {
+    CreateProductRequestDto,
+    ProductMetadataPaginationResponseDto,
+    ProductResponseDto,
+    CreateLotRequestDto,
+    LotMetadataPaginationResponseDto,
+    LotResponseDto,
+    GetProductsRequestDto,
+    GetLotsRequestDto,
+    DeleteLotRequestDto, UpdateLotRequestDto, DeleteProductRequestDto, UpdateProductRequestDto
+} from "api/market/dto";
+import {TransformWithGroup} from "@smart-home/libs/common/decorators";
+import {PlainGroupsEnum} from "@smart-home/libs/common/enums";
+import {IDeleteLot, IDeleteProduct, ILot, IProduct, IUpdateLot, IUpdateProduct} from "@smart-home/libs/types/market";
 
 @Injectable()
 export class MarketService {
@@ -51,5 +64,21 @@ export class MarketService {
             },
             ...params,
         }));
+    }
+
+    async deleteLot(params: DeleteLotRequestDto): Promise<LotResponseDto> {
+        return firstValueFrom(this.marketService.deleteLot(params));
+    }
+
+    async updateLot(params: UpdateLotRequestDto): Promise<LotResponseDto> {
+        return firstValueFrom(this.marketService.updateLot(params));
+    }
+
+    async deleteProduct(params: DeleteProductRequestDto): Promise<ProductResponseDto> {
+        return firstValueFrom(this.marketService.deleteProduct(params));
+    }
+
+    async updateProduct(params: UpdateProductRequestDto): Promise<ProductResponseDto> {
+        return firstValueFrom(this.marketService.updateProduct(params));
     }
 }

@@ -1,30 +1,36 @@
 import {
   SqlEntityRepository,
 } from '@mikro-orm/postgresql';
-import { UserEntity } from 'user/entities';
-import {IGetUserById, IGetUserByParams, IRegisterUser, IUser, UserRoleEnum} from "@smart-home/libs/types/users/user";
-import * as bcrypt from 'bcrypt';
-import {PASSWORD_SALT} from "user/constants";
-import {RpcException} from "@nestjs/microservices";
-import moment from 'moment';
 import {LotEntity} from "../lot.entity";
-import {IGetLots, ILot, ILotMetadataPagination} from "@smart-home/libs/types/market";
+import {
+  IDeleteLot,
+  IGetLotById,
+  IGetLots,
+  ILot,
+  ILotMetadataPagination,
+  IUpdateLot
+} from "@smart-home/libs/types/market";
+import {RpcException} from "@nestjs/microservices";
 
 export class LotRepository extends SqlEntityRepository<LotEntity> {
   async getLots(params: IGetLots): Promise<ILotMetadataPagination> {
-    const { pagination, types, statuses } = params;
-    const { limit, offset } = pagination;
+    const {pagination, types, statuses} = params;
+    const {limit, offset} = pagination;
 
     const qb = this.em.createQueryBuilder(LotEntity)
         .innerJoinAndSelect('products', 'products')
         .limit(limit, offset);
 
-    if(types) qb.andWhere({ type: {
-      $in: types,
-      }})
-    if(statuses) qb.andWhere({ status: {
+    if (types) qb.andWhere({
+      type: {
+        $in: types,
+      }
+    })
+    if (statuses) qb.andWhere({
+      status: {
         $in: statuses,
-      }})
+      }
+    })
 
     const [lots, total] = await qb.getResultAndCount();
 
@@ -38,76 +44,24 @@ export class LotRepository extends SqlEntityRepository<LotEntity> {
     }
   }
 
-  async getUserById(params: IGetUserById): Promise<IUser> {
+  async getLotById(params: IGetLotById): Promise<ILot> {
     const { id } = params;
 
-    const user = await this.em.getRepository(UserEntity).findOne({ id });
+    const lot = await this.em.getRepository(LotEntity).findOne({ id });
 
-    if(!user) {
-      throw new RpcException('ERRORS.USER.USER_NOT_FOUND');
+    if(!lot) {
+      throw new RpcException('ERRORS.MARKET.LOT_NOT_FOUND');
     }
 
-    return user;
+    return lot;
   }
 
-  async registerUser(params: IRegisterUser): Promise<IUser> {
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      address,
-      username,
-      password,
-    } = params;
+  async deleteLot(params: IDeleteLot): Promise<ILot> {
+    const { id } = params;
 
-    let user;
+    const lot = await this.getLotById({ id });
 
-    try {
-      user = await this.getUserByParams(params);
-    } catch (e) {
-      const hashedPassword = await bcrypt.hash(password, PASSWORD_SALT);
-
-      const user = new UserEntity();
-      user.firstName = firstName;
-      user.lastName = lastName;
-      user.email = email;
-      if(phone) user.phone = phone;
-      if(address) user.address = address;
-      user.username = username;
-      user.passwordHash = hashedPassword;
-      user.role = UserRoleEnum.USER;
-      user.lastLogin = moment().toDate();
-
-      await this.em.persistAndFlush(user);
-      return user;
-    }
-
-    if(user) {
-      throw new RpcException('ERRORS.USER.USER_ALREADY_EXIST');
-    }
-  }
-
-  async getUserByParams(params: IGetUserByParams): Promise<IUser> {
-    const { username, phone, email } = params;
-
-    const qb = this.em.createQueryBuilder(UserEntity);
-    if(username) qb.orWhere({
-      username,
-    });
-    if(phone) qb.orWhere({
-      phone,
-    });
-    if(email) qb.orWhere({
-      email,
-    });
-
-    const user = await qb.getSingleResult();
-
-    if(!user) {
-      throw new RpcException('ERRORS.USER.USER_NOT_FOUND');
-    }
-
-    return user;
+    await this.em.removeAndFlush(lot);
+    return lot;
   }
 }

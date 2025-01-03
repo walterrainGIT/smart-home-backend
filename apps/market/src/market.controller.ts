@@ -3,15 +3,17 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
 import {
   ICreateLot,
-  ICreateProduct,
+  ICreateProduct, IDeleteLot, IDeleteProduct,
   IGetLots,
   IGetProducts,
   ILot, ILotMetadataPagination,
   IProduct,
-  IProductMetadataPagination
+  IProductMetadataPagination, IUpdateLot, IUpdateProduct
 } from "@smart-home/libs/types/market";
 import {MarketService} from "market/market.service";
 import {TransformWithGroup} from "@smart-home/libs/common/decorators";
+import {LotEntity, ProductEntity} from "market/entities";
+import {classToPlain} from "class-transformer";
 
 @Controller('User')
 export class MarketController {
@@ -39,5 +41,29 @@ export class MarketController {
   @TransformWithGroup([PlainGroupsEnum.PUBLIC])
   async getLots(params: IGetLots): Promise<ILotMetadataPagination> {
     return this.marketService.getLots(params);
+  }
+
+  @GrpcMethod('MarketService', 'DeleteLot')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
+  async deleteLot(params: IDeleteLot): Promise<ILot> {
+    return this.marketService.deleteLot(params);
+  }
+
+  @GrpcMethod('MarketService', 'UpdateLot')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
+  async updateLot(params: IUpdateLot): Promise<ILot> {
+    return this.marketService.updateLot(params);
+  }
+
+  @GrpcMethod('MarketService', 'DeleteProduct')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
+  async deleteProduct(params: IDeleteProduct): Promise<IProduct> {
+    return this.marketService.deleteProduct(params);
+  }
+
+  @GrpcMethod('MarketService', 'UpdateProduct')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
+  async updateProduct(params: IUpdateProduct): Promise<IProduct> {
+    return this.marketService.updateProduct(params);
   }
 }

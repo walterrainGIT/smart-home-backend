@@ -4,7 +4,13 @@ import {
 import {RpcException} from "@nestjs/microservices";
 import { ProductEntity} from "market/entities";
 import {IGetProductsByIds} from "@smart-home/libs/types/market/interfaces/get-products-by-ids.interface";
-import {IGetProducts, IProduct, IProductMetadataPagination} from "@smart-home/libs/types/market";
+import {
+  IDeleteProduct,
+  IGetProducts,
+  IProduct,
+  IProductMetadataPagination,
+  IUpdateProduct
+} from "@smart-home/libs/types/market";
 
 export class ProductRepository extends SqlEntityRepository<ProductEntity> {
   async getProducts(params: IGetProducts): Promise<IProductMetadataPagination> {
@@ -40,5 +46,28 @@ export class ProductRepository extends SqlEntityRepository<ProductEntity> {
     }
 
     return products;
+  }
+
+  async deleteProduct(params: IDeleteProduct): Promise<IProduct> {
+    const { id } = params;
+
+    const [product] = await this.getProductsByIds({ ids: [ id ] });
+
+    await this.em.removeAndFlush(product);
+    return product;
+  }
+
+  async updateProduct(params: IUpdateProduct): Promise<IProduct> {
+    const { id, name, shortDescription, description, price, image } = params;
+
+    const [product] = await this.getProductsByIds({ ids: [ id ] });
+    if(name) product.name = name;
+    if(shortDescription) product.shortDescription = shortDescription;
+    if(description) product.description = description;
+    if(price) product.price = price;
+    if(image) product.image = image;
+
+    await this.em.persistAndFlush(product);
+    return product;
   }
 }

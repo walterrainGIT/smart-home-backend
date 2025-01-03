@@ -5,3 +5,8 @@ export * from './get-products.interface';
 export * from './get-lots.interface';
 export * from './get-products-by-ids.interface';
 export * from './create-product.interface';
+export * from './delete-product.interface';
+export * from './update-product.interface';
+export * from './delete-lot.interface';
+export * from './update-lot.interface';
+export * from './get-lot-by-id.interface';

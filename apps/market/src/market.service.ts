@@ -2,13 +2,13 @@ import {Injectable} from '@nestjs/common';
 import {Collection, EntityManager} from '@mikro-orm/core';
 import {
     ICreateLot,
-    ICreateProduct,
+    ICreateProduct, IDeleteLot, IDeleteProduct, IGetLotById,
     IGetLots,
     IGetProducts,
     ILot,
     ILotMetadataPagination,
     IProduct,
-    IProductMetadataPagination,
+    IProductMetadataPagination, IUpdateLot, IUpdateProduct,
     LotStatusEnum
 } from "@smart-home/libs/types/market";
 import {IGetProductsByIds} from "@smart-home/libs/types/market/interfaces/get-products-by-ids.interface";
@@ -26,6 +26,10 @@ export class MarketService {
 
     async getLots(params: IGetLots): Promise<ILotMetadataPagination> {
         return this.em.fork().getRepository(LotEntity).getLots(params);
+    }
+
+    async getLotById(params: IGetLotById): Promise<ILot> {
+        return this.em.fork().getRepository(LotEntity).getLotById(params);
     }
 
     async getProductsByIds(params: IGetProductsByIds): Promise<IProduct[]> {
@@ -63,5 +67,34 @@ export class MarketService {
 
             await this.em.fork().persistAndFlush(lot);
             return lot;
+    }
+
+    async deleteLot(params: IDeleteLot): Promise<ILot> {
+        return this.em.fork().getRepository(LotEntity).deleteLot(params);
+    }
+
+    async updateLot(params: IUpdateLot): Promise<ILot> {
+        const { id, type, name, shortDescription, description, price, image, status, productsIds } = params;
+
+        const lot = await this.getLotById({ id });
+        if(type) lot.type = type;
+        if(name) lot.name = name;
+        if(shortDescription) lot.shortDescription = shortDescription;
+        if(description) lot.description = description;
+        if(price) lot.price = price;
+        if(image) lot.image = image;
+        if(status) lot.status = status;
+        if(productsIds) lot.products = await this.getProductsByIds({ ids: productsIds });
+
+        await this.em.fork().persistAndFlush(lot);
+        return lot;
+    }
+
+    async deleteProduct(params: IDeleteProduct): Promise<IProduct> {
+        return this.em.fork().getRepository(ProductEntity).deleteProduct(params);
+    }
+
+    async updateProduct(params: IUpdateProduct): Promise<IProduct> {
+        return this.em.fork().getRepository(ProductEntity).updateProduct(params);
     }
 }

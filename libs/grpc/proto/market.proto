@@ -10,6 +10,11 @@ service MarketService {
   rpc CreateProduct(CreateProductRequest) returns (Product); // Создать продукт
   rpc GetProducts(GetProductsRequest) returns (GetProductsResponse); // Получить список продуктов
   rpc GetLots(GetLotsRequest) returns (GetLotsResponse);   // Получить список лотов
+
+  rpc DeleteLot(DeleteLotRequest) returns (Lot);          // Удалить лот
+  rpc UpdateLot(UpdateLotRequest) returns (Lot);          // Обновить лот
+  rpc DeleteProduct(DeleteProductRequest) returns (Product); // Удалить продукты
+  rpc UpdateProduct(UpdateProductRequest) returns (Product); // Обновить продукт
 }
 
 // Запрос на создание продукта
@@ -18,7 +23,7 @@ message CreateProductRequest {
   string shortDescription = 2;     // Краткое описание (необязательно)
   string description = 3;          // Описание (необязательно)
   string image = 4;                // Изображение (необязательное)
-  int32 price = 5;                // Цена
+  int32 price = 5;                 // Цена
 }
 
 // Запрос на создание лота
@@ -27,7 +32,7 @@ message CreateLotRequest {
   string shortDescription = 2;     // Краткое описание лота (необязательно)
   string description = 3;          // Описание лота (необязательно)
   string image = 4;                // Изображение лота (необязательно)
-  string type = 5;            // Тип лота (обязательное)
+  string type = 5;                 // Тип лота (обязательное)
   repeated int32 productsIds = 6;  // Идентификаторы продуктов (обязательное)
 }
 
@@ -44,13 +49,8 @@ message GetProductsResponse {
 
 // Запрос на получение списка лотов
 message GetLotsRequest {
-  // Массив типов лотов (опционально)
-  repeated string types = 1;
-
-  // Массив статусов лотов (опционально)
-  repeated string statuses = 2;
-
-  // Параметры пагинации
+  repeated string types = 1;    // Массив типов лотов (опционально)
+  repeated string statuses = 2; // Массив статусов лотов (опционально)
   pagination.Pagination pagination = 3; // Параметры пагинации
 }
 
@@ -58,6 +58,39 @@ message GetLotsRequest {
 message GetLotsResponse {
   repeated Lot lots = 1;                  // Список лотов
   pagination.PaginationResponse metadata = 2; // Метаданные пагинации
+}
+
+// Запрос на удаление лота
+message DeleteLotRequest {
+  int32 id = 1;  // Идентификатор лота, который нужно удалить
+}
+
+// Запрос на обновление лота
+message UpdateLotRequest {
+  int32 id = 1;                    // Идентификатор лота
+  string name = 2;                 // Название лота (опционально)
+  string shortDescription = 3;     // Краткое описание лота (необязательно)
+  string description = 4;          // Описание лота (необязательно)
+  double price = 5;                // Цена лота (необязательно)
+  string image = 6;                // Изображение лота (необязательно)
+  string type = 7;                 // Тип лота (необязательно)
+  string status = 8;               // Статус лота (необязательно)
+  repeated int32 productsIds = 9;  // Список идентификаторов продуктов (необязательно)
+}
+
+// Запрос на удаление продуктов
+message DeleteProductRequest {
+  int32 id = 1;  // Список идентификаторов продуктов для удаления
+}
+
+// Запрос на обновление продукта
+message UpdateProductRequest {
+  int32 id = 1;                    // Идентификатор продукта
+  string name = 2;                 // Название продукта (опционально)
+  string shortDescription = 3;     // Краткое описание продукта (необязательно)
+  string description = 4;          // Описание продукта (необязательно)
+  double price = 5;                // Цена продукта (необязательно)
+  string image = 6;                // Изображение продукта (необязательно)
 }
 
 // Лот
@@ -68,8 +101,8 @@ message Lot {
   string description = 4;          // Описание (необязательно)
   double price = 5;                // Цена (необязательно)
   string image = 6;                // Изображение (необязательно)
-  string type = 7;            // Тип лота
-  string status = 8;        // Статус лота
+  string type = 7;                 // Тип лота
+  string status = 8;               // Статус лота
   repeated Product products = 9;   // Список продуктов (если необходимо)
 }
 
