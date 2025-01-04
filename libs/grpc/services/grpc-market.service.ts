@@ -9,6 +9,7 @@ import {
   IProductMetadataPagination, IUpdateLot, IUpdateOrder, IUpdateProduct
 } from "@smart-home/libs/types/market";
 import {IGetOrders} from "@smart-home/libs/types/market/interfaces/get-orders.interface";
+import {ICancelOrder} from "@smart-home/libs/types/market/interfaces/cancel-order.interface";
 
 export interface GrpcMarketService {
   createProduct(params: ICreateProduct): Observable<IProduct>;  // Создать продукт
@@ -24,6 +25,7 @@ export interface GrpcMarketService {
   getOrders(params: IGetOrders): Observable<IOrderMetadataPagination>;  // Получить список заказов
   createOrder(params: ICreateOrder): Observable<IOrder>;                 // Создать заказ
   updateOrder(params: IUpdateOrder): Observable<IOrder>;                 // Обновить заказ
+  cancelOrder(params: ICancelOrder): Observable<IOrder>;                 // Отменить заказ
 }
 
 

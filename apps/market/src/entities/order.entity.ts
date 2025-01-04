@@ -9,6 +9,7 @@ import { BaseEntity, NumberBigIntType } from '@smart-home/libs/common/database';
 import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
 import { OrderRepository} from "./repositories";
 import {ILot, IOrder, OrderStatusEnum} from "@smart-home/libs/types/market";
+import {IUser} from "@smart-home/libs/types/users/user";
 
 @Entity({
   tableName: `market.orders`,
@@ -26,6 +27,9 @@ export class OrderEntity extends BaseEntity implements IOrder {
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   userId: number;
 
+  @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
+  user: IUser;
+
   @Property()
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   status: OrderStatusEnum;
@@ -33,4 +37,8 @@ export class OrderEntity extends BaseEntity implements IOrder {
   @ManyToOne('LotEntity')
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   lot: ILot;
+
+  @Property()
+  @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
+  createdAt: Date;
 }

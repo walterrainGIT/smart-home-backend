@@ -5,6 +5,7 @@ import {MARKET_BASE_SERVICE_NAME} from "@smart-home/libs/common/constants";
 import { PinoLoggerService} from "@smart-home/libs/common/logger";
 import {GrpcMarketService} from "@smart-home/libs/grpc/services/grpc-market.service";
 import {
+    CancelOrderRequestDto,
     CreateOrderRequestDto,
     GetOrdersRequestDto,
     OrderMetadataPagination,
@@ -37,11 +38,15 @@ export class OrderService {
         }));
     }
 
-    async createOrder(params: CreateOrderRequestDto): Promise<OrderResponseDto> {
-        return firstValueFrom(this.marketService.createOrder(params));
+    async createOrder(userId: number, params: CreateOrderRequestDto): Promise<OrderResponseDto> {
+        return firstValueFrom(this.marketService.createOrder({ userId, ...params }));
     }
 
     async updateOrder(params: UpdateOrderRequestDto): Promise<OrderResponseDto> {
         return firstValueFrom(this.marketService.updateOrder(params));
+    }
+
+    async cancelOrder(userId: number, params: CancelOrderRequestDto): Promise<OrderResponseDto> {
+        return firstValueFrom(this.marketService.cancelOrder({ userId, ...params}));
     }
 }

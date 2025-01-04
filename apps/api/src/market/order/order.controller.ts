@@ -1,21 +1,22 @@
-import {Body, Controller, HttpStatus, Patch, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, HttpStatus, Patch, Post, Query, UseGuards} from '@nestjs/common';
 import { OrderService } from './order.service';
 import {ApiBearerAuth, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {JwtAuthGuard, UserRoles} from "api/users/user/auth/jwt-auth-guard";
+import {JwtAuthGuard, User, UserRoles} from "api/users/user/auth/jwt-auth-guard";
 import {UserRoleEnum} from "@smart-home/libs/types/users/user";
 import {
+  CancelOrderRequestDto,
   CreateOrderRequestDto,
   GetOrdersRequestDto,
   OrderMetadataPagination,
   OrderResponseDto, UpdateOrderRequestDto
 } from "api/market/order/dto";
 
-@Controller('order')
-@ApiTags('order')
+@Controller('market/order')
+@ApiTags('market/order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  @Post('create')
+  @Post()
   @ApiResponse({
     status: HttpStatus.OK,
     type: OrderResponseDto,
@@ -23,11 +24,11 @@ export class OrderController {
   })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @UserRoles(UserRoleEnum.ADMIN)
   createOrder(
       @Body() body: CreateOrderRequestDto,
+      @User() userId: number,
   ): Promise<OrderResponseDto> {
-    return this.orderService.createOrder(body);
+    return this.orderService.createOrder(userId, body);
   }
 
   @Patch()
@@ -43,6 +44,21 @@ export class OrderController {
       @Body() body: UpdateOrderRequestDto
   ): Promise<OrderResponseDto> {
     return this.orderService.updateOrder(body);
+  }
+
+  @Delete()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: OrderResponseDto,
+    description: 'Returns updated order',
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  cancelOrder(
+      @Query() query: CancelOrderRequestDto,
+      @User() userId: number,
+  ): Promise<OrderResponseDto> {
+    return this.orderService.cancelOrder(userId, query);
   }
 
   @Post('get')

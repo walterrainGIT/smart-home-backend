@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {IGetUserById, IUpdateUser, IUser} from "@smart-home/libs/types/users/user";
+import {IGetUserById, IGetUsersByIds, IUpdateUser, IUser, IUsersByIds} from "@smart-home/libs/types/users/user";
 import {UserEntity} from "user/entities";
 import { EntityManager } from '@mikro-orm/core';
 
@@ -15,5 +15,11 @@ export class UserService {
 
   async updateUser(params: IUpdateUser): Promise<IUser> {
     return this.em.fork().getRepository(UserEntity).updateUser(params);
+  }
+
+  async getUsersByIds(params: IGetUsersByIds): Promise<IUsersByIds> {
+    return {
+      users: await this.em.fork().getRepository(UserEntity).getUsersByIds(params)
+    };
   }
 }

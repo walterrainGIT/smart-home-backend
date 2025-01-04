@@ -1,15 +1,10 @@
-import {
-  SqlEntityRepository,
-} from '@mikro-orm/postgresql';
+import {SqlEntityRepository,} from '@mikro-orm/postgresql';
 import {OrderEntity} from "market/entities";
-import {
-  IGetOrderById,
-  IOrder,
-  IOrderMetadataPagination,
-} from "@smart-home/libs/types/market";
+import {IGetOrderById, IOrder, IOrderMetadataPagination, OrderStatusEnum,} from "@smart-home/libs/types/market";
 import {IGetOrders} from "@smart-home/libs/types/market/interfaces/get-orders.interface";
 import {RpcException} from "@nestjs/microservices";
 import {SortDirectionEnum} from "@smart-home/libs/common/enums";
+import {ICancelOrder} from "@smart-home/libs/types/market/interfaces/cancel-order.interface";
 
 export class OrderRepository extends SqlEntityRepository<OrderEntity> {
   async getOrderById(params: IGetOrderById): Promise<IOrder> {
@@ -29,6 +24,7 @@ export class OrderRepository extends SqlEntityRepository<OrderEntity> {
     const { limit, offset } = pagination;
 
     const qb = this.em.createQueryBuilder(OrderEntity)
+        .innerJoinAndSelect('lot', 'lot')
         .orderBy({ createdAt: SortDirectionEnum.DESC })
         .limit(limit, offset);
 
@@ -65,5 +61,20 @@ export class OrderRepository extends SqlEntityRepository<OrderEntity> {
         offset,
       }
     }
+  }
+
+  async cancelOrder(params: ICancelOrder): Promise<IOrder> {
+    const { id, userId } = params;
+
+    const order = await this.getOrderById({ id });
+
+    if(order.userId !== userId) {
+      throw new RpcException('ERRORS.MARKET.CANNOT_CANCELED_ORDER');
+    }
+
+    order.status = OrderStatusEnum.CANCELED;
+
+    await this.em.persistAndFlush(order);
+    return order;
   }
 }

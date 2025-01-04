@@ -14,6 +14,7 @@ import {MarketService} from "market/market.service";
 import {TransformWithGroup} from "@smart-home/libs/common/decorators";
 import {IGetOrders} from "@smart-home/libs/types/market/interfaces/get-orders.interface";
 import {OrderService} from "market/order.service";
+import {ICancelOrder} from "@smart-home/libs/types/market/interfaces/cancel-order.interface";
 
 @Controller('User')
 export class MarketController {
@@ -86,5 +87,11 @@ export class MarketController {
   @TransformWithGroup([PlainGroupsEnum.PUBLIC])
   async updateOrder(params: IUpdateOrder): Promise<IOrder> {
     return this.orderService.updateOrder(params);
+  }
+
+  @GrpcMethod('MarketService', 'CancelOrder')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
+  async cancelOrder(params: ICancelOrder): Promise<IOrder> {
+    return this.orderService.cancelOrder(params);
   }
 }

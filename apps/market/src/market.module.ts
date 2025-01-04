@@ -15,6 +15,10 @@ import {OrderService} from "market/order.service";
       serviceName: MARKET_BASE_SERVICE_NAME,
       port: GRPC_MARKET_PORT,
     })),
+    ClientsModule.register(getClientConfig({
+      serviceName: USER_BASE_SERVICE_NAME,
+      port: GRPC_USER_PORT,
+    })),
     MikroOrmModule.forRoot(mikroOrmConfig),
     MikroOrmModule.forFeature({ entities }),
   ],

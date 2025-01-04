@@ -14,3 +14,4 @@ export * from './order-interface';
 export * from './create-order.interface';
 export * from './update-order.interface';
 export * from './get-order-by-id.interface';
+export * from './cancel-order.interface';

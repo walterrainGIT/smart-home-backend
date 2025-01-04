@@ -3,6 +3,7 @@ syntax = "proto3";
 package market;
 
 import "pagination.proto"; // Импортируем общую пагинацию
+import "user.proto"; // Импортируем общего пользователя
 
 // Определение сервиса для работы с лотами, продуктами и заказами
 service MarketService {
@@ -19,6 +20,7 @@ service MarketService {
   rpc GetOrders(GetOrdersRequest) returns (GetOrdersResponse); // Получить список заказов
   rpc CreateOrder(CreateOrderRequest) returns (Order); // Создать заказ
   rpc UpdateOrder(UpdateOrderRequest) returns (Order); // Обновить заказ
+  rpc CancelOrder(CancelOrderRequest) returns (Order); // Отменить заказ
 }
 
 // Запрос на создание продукта
@@ -126,12 +128,20 @@ message UpdateOrderRequest {
   string status = 4;               // Статус заказа (необязательно)
 }
 
+// Запрос на отмену заказа
+message CancelOrderRequest {
+  int32 id = 1;                    // Идентификатор заказа
+  int32 userId = 2;                // Идентификатор пользователя (необязательно)
+}
+
 // Заказ
 message Order {
   int32 id = 1;                    // Идентификатор заказа
   int32 userId = 2;                // Идентификатор пользователя
   string status = 3;               // Статус заказа
   Lot lot = 4;                     // Лот, связанный с заказом
+  string createdAt = 5;            // Дата создания заказа
+  user.UserResponse user = 6; // Данные пользователя
 }
 
 // Лот

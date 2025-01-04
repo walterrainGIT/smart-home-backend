@@ -4,7 +4,7 @@ import {
 import { UserEntity } from 'user/entities';
 import {
   IGetUserById,
-  IGetUserByParams,
+  IGetUserByParams, IGetUsersByIds,
   IRegisterUser,
   IUpdateUser,
   IUser,
@@ -26,6 +26,22 @@ export class UserRepository extends SqlEntityRepository<UserEntity> {
     }
 
     return user;
+  }
+
+  async getUsersByIds(params: IGetUsersByIds): Promise<IUser[]> {
+    const { ids } = params;
+
+    const users = await this.em.getRepository(UserEntity).find({
+      id: {
+        $in: ids,
+      }
+    });
+
+    if(!users.length) {
+      throw new RpcException('ERRORS.USER.USER_NOT_FOUND');
+    }
+
+    return users;
   }
 
   async updateUser(params: IUpdateUser): Promise<IUser> {

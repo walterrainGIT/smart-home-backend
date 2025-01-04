@@ -1,6 +1,6 @@
 import { IOrder, IOrderMetadataPagination, OrderStatusEnum} from "@smart-home/libs/types/market";
 import {ApiProperty} from "@nestjs/swagger";
-import {IsArray, IsEnum, IsNumber, IsObject, IsOptional, ValidateNested} from "class-validator";
+import {IsArray, IsDate, IsEnum, IsNumber, IsObject, IsOptional, ValidateNested} from "class-validator";
 import {Type} from "class-transformer";
 import {MetadataPaginationResponseDto} from "@smart-home/libs/common/dtos";
 import {LotResponseDto} from "api/market/dto";
@@ -41,16 +41,24 @@ export class OrderResponseDto implements IOrder {
     status: OrderStatusEnum;
 
     @ApiProperty({
-        name: 'lots',
+        name: 'lot',
         required: true,
-        description: 'lots',
-        type: [LotResponseDto],
+        description: 'lot',
     })
     @IsOptional()
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => LotResponseDto)
+    @IsObject()
+    @ValidateNested()
+    @Type(() => LotResponseDto as any)
     lot: LotResponseDto;
+
+    @ApiProperty({
+        name: 'createdAt',
+        required: true,
+        description: 'createdAt',
+    })
+    @IsDate()
+    @IsOptional()
+    createdAt: Date;
 }
 
 export class OrderMetadataPagination implements IOrderMetadataPagination {
