@@ -21,7 +21,7 @@ import {
 export class PortfolioController {
   constructor(private readonly portfolioService: PortfolioService) {}
 
-  @Post('portfolio/customer/get')
+  @Post('customer/get')
   @ApiResponse({
     status: HttpStatus.OK,
     type: CustomerMetadataPaginationResponseDto,
@@ -33,7 +33,7 @@ export class PortfolioController {
     return this.portfolioService.getCustomers(body);
   }
 
-  @Post('portfolio/customer/create')
+  @Post('customer/create')
   @ApiResponse({
     status: HttpStatus.OK,
     type: CustomerResponseDto,
@@ -48,7 +48,7 @@ export class PortfolioController {
     return this.portfolioService.createCustomer(body);
   }
 
-  @Patch('portfolio/customer/update')
+  @Patch('customer/update')
   @ApiResponse({
     status: HttpStatus.OK,
     type: CustomerResponseDto,
@@ -63,7 +63,7 @@ export class PortfolioController {
     return this.portfolioService.updateCustomer(body);
   }
 
-  @Delete('portfolio/customer')
+  @Delete('customer')
   @ApiResponse({
     status: HttpStatus.OK,
     type: CustomerResponseDto,
@@ -78,7 +78,7 @@ export class PortfolioController {
     return this.portfolioService.deleteCustomer(query);
   }
 
-  @Post('portfolio/get')
+  @Post('get')
   @ApiResponse({
     status: HttpStatus.OK,
     type: PortfolioMetadataPaginationResponseDto,
@@ -90,7 +90,7 @@ export class PortfolioController {
     return this.portfolioService.getPortfolios(body);
   }
 
-  @Post('portfolio/create')
+  @Post('create')
   @ApiResponse({
     status: HttpStatus.OK,
     type: PortfolioResponseDto,
@@ -105,7 +105,7 @@ export class PortfolioController {
     return this.portfolioService.createPortfolio(body);
   }
 
-  @Patch('portfolio')
+  @Patch('update')
   @ApiResponse({
     status: HttpStatus.OK,
     type: PortfolioResponseDto,
@@ -120,7 +120,7 @@ export class PortfolioController {
     return this.portfolioService.updatePortfolio(body);
   }
 
-  @Delete('portfolio')
+  @Delete()
   @ApiResponse({
     status: HttpStatus.OK,
     type: PortfolioResponseDto,

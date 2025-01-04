@@ -96,7 +96,7 @@ export class MarketController {
     return this.marketService.deleteProduct(query);
   }
 
-  @Patch('products/update')
+  @Patch('product/update')
   @ApiResponse({
     status: HttpStatus.OK,
     type: ProductResponseDto,
