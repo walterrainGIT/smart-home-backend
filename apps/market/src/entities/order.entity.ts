@@ -38,7 +38,6 @@ export class OrderEntity extends BaseEntity implements IOrder {
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   lot: ILot;
 
-  @Property()
   @Expose({ groups: [PlainGroupsEnum.PUBLIC] })
   createdAt: Date;
 }
