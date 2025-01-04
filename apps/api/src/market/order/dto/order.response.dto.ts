@@ -4,6 +4,7 @@ import {IsArray, IsDate, IsEnum, IsNumber, IsObject, IsOptional, ValidateNested}
 import {Type} from "class-transformer";
 import {MetadataPaginationResponseDto} from "@smart-home/libs/common/dtos";
 import {LotResponseDto} from "api/market/dto";
+import {UserResponseDto} from "api/users/user/dto";
 
 export class OrderResponseDto implements IOrder {
     @ApiProperty({
@@ -29,6 +30,17 @@ export class OrderResponseDto implements IOrder {
     @IsNumber()
     @IsOptional()
     userId: number;
+
+    @ApiProperty({
+        name: 'user',
+        required: true,
+        description: 'user',
+    })
+    @IsOptional()
+    @IsObject()
+    @ValidateNested()
+    @Type(() => UserResponseDto as any)
+    user: UserResponseDto;
 
     @ApiProperty({
         name: 'status',
