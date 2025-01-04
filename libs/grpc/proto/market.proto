@@ -4,7 +4,7 @@ package market;
 
 import "pagination.proto"; // Импортируем общую пагинацию
 
-// Определение сервиса для работы с лотами и продуктами
+// Определение сервиса для работы с лотами, продуктами и заказами
 service MarketService {
   rpc CreateLot(CreateLotRequest) returns (Lot);          // Создать лот
   rpc CreateProduct(CreateProductRequest) returns (Product); // Создать продукт
@@ -15,6 +15,10 @@ service MarketService {
   rpc UpdateLot(UpdateLotRequest) returns (Lot);          // Обновить лот
   rpc DeleteProduct(DeleteProductRequest) returns (Product); // Удалить продукты
   rpc UpdateProduct(UpdateProductRequest) returns (Product); // Обновить продукт
+
+  rpc GetOrders(GetOrdersRequest) returns (GetOrdersResponse); // Получить список заказов
+  rpc CreateOrder(CreateOrderRequest) returns (Order); // Создать заказ
+  rpc UpdateOrder(UpdateOrderRequest) returns (Order); // Обновить заказ
 }
 
 // Запрос на создание продукта
@@ -91,6 +95,43 @@ message UpdateProductRequest {
   string description = 4;          // Описание продукта (необязательно)
   double price = 5;                // Цена продукта (необязательно)
   string image = 6;                // Изображение продукта (необязательно)
+}
+
+// Запрос на получение списка заказов
+message GetOrdersRequest {
+  repeated int32 ids = 1;               // Идентификаторы заказов (необязательно)
+  repeated int32 usersIds = 2;          // Идентификаторы пользователей (необязательно)
+  repeated string statuses = 3;          // Статусы заказов (необязательно)
+  repeated int32 lotsIds = 4;           // Идентификаторы лотов (необязательно)
+  pagination.Pagination pagination = 5; // Параметры пагинации
+}
+
+// Ответ на запрос списка заказов
+message GetOrdersResponse {
+  repeated Order orders = 1;                // Список заказов
+  pagination.PaginationResponse metadata = 2; // Метаданные пагинации
+}
+
+// Запрос на создание заказа
+message CreateOrderRequest {
+  int32 userId = 1;  // Идентификатор пользователя
+  int32 lotId = 2;   // Идентификатор лота
+}
+
+// Запрос на обновление заказа
+message UpdateOrderRequest {
+  int32 id = 1;                    // Идентификатор заказа
+  int32 userId = 2;                // Идентификатор пользователя (необязательно)
+  int32 lotId = 3;                 // Идентификатор лота (необязательно)
+  string status = 4;               // Статус заказа (необязательно)
+}
+
+// Заказ
+message Order {
+  int32 id = 1;                    // Идентификатор заказа
+  int32 userId = 2;                // Идентификатор пользователя
+  string status = 3;               // Статус заказа
+  Lot lot = 4;                     // Лот, связанный с заказом
 }
 
 // Лот

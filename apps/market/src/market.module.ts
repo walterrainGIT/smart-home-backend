@@ -7,6 +7,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import {getClientConfig} from "@smart-home/libs/common/modules/configs";
 import {MarketService} from "./market.service";
 import {mikroOrmConfig, entities} from "./configs/mikro-orm.config";
+import {OrderService} from "market/order.service";
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import {mikroOrmConfig, entities} from "./configs/mikro-orm.config";
     MikroOrmModule.forFeature({ entities }),
   ],
   controllers: [MarketController],
-  providers: [MarketService],
+  providers: [MarketService, OrderService],
 })
 export class MarketModule {}

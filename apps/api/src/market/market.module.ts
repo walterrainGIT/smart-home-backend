@@ -5,6 +5,8 @@ import { ClientsModule } from '@nestjs/microservices';
 import { getClientConfig } from '@smart-home/libs/common/modules';
 import {MARKET_BASE_SERVICE_NAME, USER_BASE_SERVICE_NAME} from '@smart-home/libs/common/constants';
 import {GRPC_MARKET_PORT, GRPC_USER_PORT} from '@smart-home/libs/grpc';
+import {OrderController} from "api/market/order/order.controller";
+import {OrderService} from "api/market/order/order.service";
 
 @Module({
   imports: [
@@ -13,9 +15,10 @@ import {GRPC_MARKET_PORT, GRPC_USER_PORT} from '@smart-home/libs/grpc';
       port: GRPC_MARKET_PORT,
     })),
   ],
-  controllers: [MarketController],
+  controllers: [MarketController, OrderController],
   providers: [
     MarketService,
+    OrderService,
   ],
 })
 export class MarketModule {}

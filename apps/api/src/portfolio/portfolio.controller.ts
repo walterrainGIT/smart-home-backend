@@ -90,7 +90,7 @@ export class PortfolioController {
     return this.portfolioService.getPortfolios(body);
   }
 
-  @Post('create')
+  @Post()
   @ApiResponse({
     status: HttpStatus.OK,
     type: PortfolioResponseDto,
@@ -105,7 +105,7 @@ export class PortfolioController {
     return this.portfolioService.createPortfolio(body);
   }
 
-  @Patch('update')
+  @Patch()
   @ApiResponse({
     status: HttpStatus.OK,
     type: PortfolioResponseDto,

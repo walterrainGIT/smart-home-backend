@@ -1,13 +1,14 @@
 import { Observable } from 'rxjs';
 import {
-  ICreateLot,
+  ICreateLot, ICreateOrder,
   ICreateProduct, IDeleteLot, IDeleteProduct,
   IGetLots,
   IGetProducts,
-  ILot, ILotMetadataPagination,
+  ILot, ILotMetadataPagination, IOrder, IOrderMetadataPagination,
   IProduct,
-  IProductMetadataPagination, IUpdateLot, IUpdateProduct
+  IProductMetadataPagination, IUpdateLot, IUpdateOrder, IUpdateProduct
 } from "@smart-home/libs/types/market";
+import {IGetOrders} from "@smart-home/libs/types/market/interfaces/get-orders.interface";
 
 export interface GrpcMarketService {
   createProduct(params: ICreateProduct): Observable<IProduct>;  // Создать продукт
@@ -16,7 +17,13 @@ export interface GrpcMarketService {
   getLots(params: IGetLots): Observable<ILotMetadataPagination>;  // Получить список лотов
   deleteLot(params: IDeleteLot): Observable<ILot>;               // Удалить лот
   updateLot(params: IUpdateLot): Observable<ILot>;               // Обновить лот
-  deleteProduct(params: IDeleteProduct): Observable<IProduct>; // Удалить продукты
-  updateProduct(params: IUpdateProduct): Observable<IProduct>;    // Обновить продукт
+  deleteProduct(params: IDeleteProduct): Observable<IProduct>;   // Удалить продукт
+  updateProduct(params: IUpdateProduct): Observable<IProduct>;   // Обновить продукт
+
+  // Методы для работы с заказами
+  getOrders(params: IGetOrders): Observable<IOrderMetadataPagination>;  // Получить список заказов
+  createOrder(params: ICreateOrder): Observable<IOrder>;                 // Создать заказ
+  updateOrder(params: IUpdateOrder): Observable<IOrder>;                 // Обновить заказ
 }
+
 

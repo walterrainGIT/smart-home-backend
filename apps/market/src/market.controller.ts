@@ -2,22 +2,25 @@ import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { PlainGroupsEnum } from '@smart-home/libs/common/enums';
 import {
-  ICreateLot,
+  ICreateLot, ICreateOrder,
   ICreateProduct, IDeleteLot, IDeleteProduct,
-  IGetLots,
+  IGetLots, IGetOrderById,
   IGetProducts,
-  ILot, ILotMetadataPagination,
+  ILot, ILotMetadataPagination, IOrder, IOrderMetadataPagination,
   IProduct,
-  IProductMetadataPagination, IUpdateLot, IUpdateProduct
+  IProductMetadataPagination, IUpdateLot, IUpdateOrder, IUpdateProduct
 } from "@smart-home/libs/types/market";
 import {MarketService} from "market/market.service";
 import {TransformWithGroup} from "@smart-home/libs/common/decorators";
-import {LotEntity, ProductEntity} from "market/entities";
-import {classToPlain} from "class-transformer";
+import {IGetOrders} from "@smart-home/libs/types/market/interfaces/get-orders.interface";
+import {OrderService} from "market/order.service";
 
 @Controller('User')
 export class MarketController {
-  constructor(private readonly marketService: MarketService) {}
+  constructor(
+      private readonly marketService: MarketService,
+      private readonly orderService: OrderService
+  ) {}
 
   @GrpcMethod('MarketService', 'CreateProduct')
   @TransformWithGroup([PlainGroupsEnum.PUBLIC])
@@ -65,5 +68,23 @@ export class MarketController {
   @TransformWithGroup([PlainGroupsEnum.PUBLIC])
   async updateProduct(params: IUpdateProduct): Promise<IProduct> {
     return this.marketService.updateProduct(params);
+  }
+
+  @GrpcMethod('MarketService', 'GetOrders')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
+  async getOrders(params: IGetOrders): Promise<IOrderMetadataPagination> {
+    return this.orderService.getOrders(params);
+  }
+
+  @GrpcMethod('MarketService', 'CreateOrder')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
+  async createOrder(params: ICreateOrder): Promise<IOrder> {
+    return this.orderService.createOrder(params);
+  }
+
+  @GrpcMethod('MarketService', 'UpdateOrder')
+  @TransformWithGroup([PlainGroupsEnum.PUBLIC])
+  async updateOrder(params: IUpdateOrder): Promise<IOrder> {
+    return this.orderService.updateOrder(params);
   }
 }

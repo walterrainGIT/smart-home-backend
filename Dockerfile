@@ -11,7 +11,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 # Копируем все остальные файлы приложения
-COPY . .
+COPY apps/market .
 
 # Собираем проект
 RUN yarn build
@@ -20,7 +20,7 @@ RUN yarn build
 ENV NODE_ENV=production
 
 # Открываем порт для приложения
-EXPOSE 3000
+EXPOSE 3001
 
 # Запускаем приложение
 CMD ["yarn", "start:prod"]

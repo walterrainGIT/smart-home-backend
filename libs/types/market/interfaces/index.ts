@@ -10,3 +10,7 @@ export * from './update-product.interface';
 export * from './delete-lot.interface';
 export * from './update-lot.interface';
 export * from './get-lot-by-id.interface';
+export * from './order-interface';
+export * from './create-order.interface';
+export * from './update-order.interface';
+export * from './get-order-by-id.interface';

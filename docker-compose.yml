@@ -3,24 +3,24 @@ services:
   api:
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
   user:
     build:
       context: .
-      dockerfile: apps/user/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "3001:3001"
   market:
     build:
       context: .
-      dockerfile: apps/market/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "3002:3002"
   portfolio:
     build:
       context: .
-      dockerfile: apps/portfolio/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "3003:3003"
