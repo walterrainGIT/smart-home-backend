@@ -7,7 +7,8 @@ import {
   ILoginUser,
   IRegisterUser,
   IUpdateUser,
-  IUser
+  IUser,
+  IUsersByIds
 } from '@smart-home/libs/types/users/user';
 import {PlainGroupsEnum} from '@smart-home/libs/common/enums';
 import {UserService} from "user/user.service";
@@ -44,7 +45,7 @@ export class UserController {
 
   @GrpcMethod('UserService', 'GetUsersByIds')
   @TransformWithGroup([PlainGroupsEnum.PUBLIC, PlainGroupsEnum.ADMIN])
-  async getUsersByIds(params: IGetUsersByIds): Promise<IUser[]> {
+  async getUsersByIds(params: IGetUsersByIds): Promise<IUsersByIds> {
     return this.userService.getUsersByIds(params);
   }
 }
