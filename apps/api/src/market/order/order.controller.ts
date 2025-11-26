@@ -14,7 +14,9 @@ import {
 @Controller('market/order')
 @ApiTags('market/order')
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+  ) {}
 
   @Post()
   @ApiResponse({
@@ -40,7 +42,7 @@ export class OrderController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @UserRoles(UserRoleEnum.ADMIN)
-  updateOrder(
+  async updateOrder(
       @Body() body: UpdateOrderRequestDto
   ): Promise<OrderResponseDto> {
     return this.orderService.updateOrder(body);
@@ -54,7 +56,7 @@ export class OrderController {
   })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  cancelOrder(
+  async cancelOrder(
       @Query() query: CancelOrderRequestDto,
       @User() userId: number,
   ): Promise<OrderResponseDto> {

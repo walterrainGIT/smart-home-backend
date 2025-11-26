@@ -21,6 +21,17 @@ service MarketService {
   rpc CreateOrder(CreateOrderRequest) returns (Order); // Создать заказ
   rpc UpdateOrder(UpdateOrderRequest) returns (Order); // Обновить заказ
   rpc CancelOrder(CancelOrderRequest) returns (Order); // Отменить заказ
+
+  // Методы аналитики
+  rpc GetOrdersSummary(GetOrdersSummaryRequest) returns (OrdersSummaryResponse); // Статистика по заказам
+  rpc GetOrdersByPeriod(GetOrdersByPeriodRequest) returns (GetOrdersByPeriodResponse); // Заказы по периодам
+  rpc GetPopularLots(GetPopularLotsRequest) returns (GetPopularLotsResponse); // Популярные лоты
+  rpc GetTopCustomers(GetTopCustomersRequest) returns (GetTopCustomersResponse); // Топ клиентов
+
+  // Методы конфигуратора
+  rpc SaveConfiguration(SaveConfigurationRequest) returns (Configuration); // Сохранить конфигурацию
+  rpc GetConfigurations(GetConfigurationsRequest) returns (GetConfigurationsResponse); // Получить конфигурации
+  rpc DeleteConfiguration(DeleteConfigurationRequest) returns (Configuration); // Удалить конфигурацию
 }
 
 // Запрос на создание продукта
@@ -165,4 +176,122 @@ message Product {
   string description = 4;          // Описание (необязательно)
   double price = 5;                // Цена (необязательно)
   string image = 6;                // Изображение (необязательно)
+}
+
+// Запрос статистики по заказам
+message GetOrdersSummaryRequest {
+  string dateFrom = 1;  // Дата начала (необязательно)
+  string dateTo = 2;    // Дата окончания (необязательно)
+}
+
+// Ответ статистики по заказам
+message OrdersSummaryResponse {
+  int32 totalOrders = 1;           // Общее количество заказов
+  OrdersByStatus ordersByStatus = 2; // Заказы по статусам
+  double totalRevenue = 3;          // Общий доход
+  double averageOrderValue = 4;     // Средний чек
+}
+
+message OrdersByStatus {
+  int32 created = 1;
+  int32 progress = 2;
+  int32 completed = 3;
+  int32 canceled = 4;
+}
+
+// Запрос заказов по периодам
+message GetOrdersByPeriodRequest {
+  string dateFrom = 1;  // Дата начала
+  string dateTo = 2;    // Дата окончания
+  string period = 3;    // Период: day, week, month
+}
+
+// Ответ заказов по периодам
+message GetOrdersByPeriodResponse {
+  repeated OrderPeriodData data = 1;
+}
+
+message OrderPeriodData {
+  string period = 1;  // Период
+  int32 count = 2;    // Количество
+  double revenue = 3; // Доход
+}
+
+// Запрос популярных лотов
+message GetPopularLotsRequest {
+  int32 limit = 1;      // Лимит (необязательно)
+  string dateFrom = 2;  // Дата начала (необязательно)
+  string dateTo = 3;    // Дата окончания (необязательно)
+}
+
+// Ответ популярных лотов
+message GetPopularLotsResponse {
+  repeated PopularLot lots = 1;
+}
+
+message PopularLot {
+  int32 lotId = 1;
+  string lotName = 2;
+  int32 orderCount = 3;
+  double revenue = 4;
+  double conversionRate = 5;
+}
+
+// Запрос топ клиентов
+message GetTopCustomersRequest {
+  int32 limit = 1;      // Лимит (необязательно)
+  string dateFrom = 2;  // Дата начала (необязательно)
+  string dateTo = 3;    // Дата окончания (необязательно)
+}
+
+// Ответ топ клиентов
+message GetTopCustomersResponse {
+  repeated TopCustomer customers = 1;
+}
+
+message TopCustomer {
+  int32 userId = 1;
+  int32 orderCount = 2;
+  double totalSpent = 3;
+}
+
+// Запрос сохранения конфигурации
+message SaveConfigurationRequest {
+  int32 userId = 1;           // Идентификатор пользователя
+  repeated Room rooms = 2;    // Комнаты
+  string name = 3;           // Название (необязательно)
+}
+
+// Комната в конфигурации
+message Room {
+  int32 id = 1;              // Идентификатор комнаты
+  string type = 2;           // Тип комнаты
+  string name = 3;           // Название
+  repeated int32 products = 4; // Идентификаторы продуктов
+}
+
+// Конфигурация
+message Configuration {
+  int32 id = 1;              // Идентификатор конфигурации
+  int32 userId = 2;          // Идентификатор пользователя
+  repeated Room rooms = 3;   // Комнаты
+  double totalPrice = 4;     // Общая стоимость
+  string name = 5;           // Название
+  string createdAt = 6;      // Дата создания
+}
+
+// Запрос получения конфигураций
+message GetConfigurationsRequest {
+  int32 userId = 1;  // Идентификатор пользователя
+}
+
+// Ответ получения конфигураций
+message GetConfigurationsResponse {
+  repeated Configuration configurations = 1;
+}
+
+// Запрос удаления конфигурации
+message DeleteConfigurationRequest {
+  int32 id = 1;      // Идентификатор конфигурации
+  int32 userId = 2; // Идентификатор пользователя
 }

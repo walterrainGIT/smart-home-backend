@@ -15,9 +15,6 @@ import {
     GetLotsRequestDto,
     DeleteLotRequestDto, UpdateLotRequestDto, DeleteProductRequestDto, UpdateProductRequestDto
 } from "api/market/dto";
-import {TransformWithGroup} from "@smart-home/libs/common/decorators";
-import {PlainGroupsEnum} from "@smart-home/libs/common/enums";
-import {IDeleteLot, IDeleteProduct, ILot, IProduct, IUpdateLot, IUpdateProduct} from "@smart-home/libs/types/market";
 
 @Injectable()
 export class MarketService {
